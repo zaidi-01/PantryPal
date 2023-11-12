@@ -10,7 +10,7 @@ catch {
 }
 
 $connection = New-Object MySql.Data.MySqlClient.MySqlConnection
-$connection.ConnectionString = "Server=$($config.db_host); Port=$($config.db_port); Uid=$($config.db_user); Pwd=$($config.db_pwd); Pooling=false; SslMode=none;"
+$connection.ConnectionString = "Server=$($config.db_host); Port=$($config.db_port); Uid=$($config.db_user); Pwd=$($config.db_pwd); Pooling=false;"
 try {
   $connection.Open()
 }
@@ -24,13 +24,13 @@ $command = $connection.CreateCommand()
 $command.CommandText = "CREATE DATABASE IF NOT EXISTS $($config.db_name); USE $($config.db_name);"
 $command.ExecuteNonQuery()
 
-$files = Get-ChildItem -Path .\tables -Filter *.sql
+$files = Get-ChildItem -Path $PSScriptRoot\..\database\tables -Filter *.sql
 foreach ($file in $files) {
   $command.CommandText = Get-Content -Raw -Path $file.FullName
   $command.ExecuteNonQuery()
 }
 
-$files = Get-ChildItem -Path .\stored-procedures -Filter *.sql
+$files = Get-ChildItem -Path $PSScriptRoot\..\database\stored-procedures -Filter *.sql
 foreach ($file in $files) {
   $command.CommandText = Get-Content -Raw -Path $file.FullName
   $command.ExecuteNonQuery()
