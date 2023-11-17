@@ -1,0 +1,53 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/client"
+    schedule:
+      interval: "daily"
+    labels:
+      - "npm"
+      - "dependencies"
+    reviewers:
+      - "zaidi-01"
+      - "StevieShibly8"
+      - "NilinReza"
+      - "JJTomines"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    groups:
+      angular:
+        patterns:
+          - "@angular*"
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: "nuget"
+    directory: "/server"
+    schedule:
+      interval: "daily"
+    labels:
+      - "nuget"
+      - "dependencies"
+    reviewers:
+      - "zaidi-01"
+      - "StevieShibly8"
+      - "NilinReza"
+      - "JJTomines"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    groups:
+      microsoft:
+        patterns:
+          - "Microsoft*"
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
