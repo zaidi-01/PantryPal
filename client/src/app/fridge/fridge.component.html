@@ -1,0 +1,35 @@
+<h1>Fridge</h1>
+<br>
+<br>
+<div class="form-outline">
+  <input type="search" id="form1" class="form-control" placeholder="Search Ingredient" aria-label="Search" [(ngModel)]="searchText" (input)="filterIngredients()"/>
+</div>
+<br>
+<br>  
+  <h2>Ingredients</h2>
+  
+  <ng-container>
+    <body class="no-ingredient-text" *ngIf="addedIngredients.size == 0 && !searchText">Use the search bar to find and add/remove ingredients</body>
+  </ng-container>
+  
+  <ng-container *ngIf="searchText">
+    <div class= "row">
+      <div class="col-md-3" *ngFor="let ingredient of filteredItems">
+        <div class="ingredient available-ingredient" [class.added-ingredient]="addedIngredients.has(ingredient)">
+          <span class="text">{{ingredient}}</span>
+          <button class="btn" [ngClass]="addedIngredients.has(ingredient) ? 'btn-success delete-button': 'btn-secondary add-button'" (click)="addedIngredients.has(ingredient) ? deleteIngredient(ingredient) :addIngredient(ingredient)">{{addedIngredients.has(ingredient) ? '-':'+'}}</button>
+        </div>
+      </div>
+    </div>
+  
+  </ng-container>
+  <ng-container *ngIf="!searchText">
+    <div class= "row">
+      <div class="col-md-3" *ngFor="let ingredient of addedIngredients">
+        <div class="ingredient added-ingredient">
+          <span class="text">{{ingredient}}</span>
+          <button class="btn btn-success delete-button" (click)="deleteIngredient(ingredient)">-</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
