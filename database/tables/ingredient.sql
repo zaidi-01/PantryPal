@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS ingredient (
-  name TINYTEXT NOT NULL,
-  display_name TINYTEXT,
-  aliases TINYTEXT
+  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(64) NOT NULL,
+  UNIQUE (name)
 );
