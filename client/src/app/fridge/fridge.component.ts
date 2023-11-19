@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import { FridgeService } from '../../../src/services/fridge/fridge.service';
+import { Component, OnInit } from '@angular/core';
+import { FridgeService } from '@services';
 
 @Component({
   selector: 'app-fridge-component',
