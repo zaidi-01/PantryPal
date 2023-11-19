@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class FridgeController : ControllerBase
     {
         public FridgeController() { }

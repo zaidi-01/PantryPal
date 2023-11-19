@@ -12,6 +12,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
+import { RecipeComponent } from './recipe/recipe.component';
 import { FridgeComponent } from './fridge/fridge.component';
 import { CommonModule, NgFor, NgIf, UpperCasePipe } from '@angular/common';
 
@@ -22,7 +23,8 @@ import { CommonModule, NgFor, NgIf, UpperCasePipe } from '@angular/common';
     HomeComponent,
     CounterComponent,
     FridgeComponent,
-    FetchDataComponent
+    FetchDataComponent,
+    RecipeComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -37,7 +39,8 @@ import { CommonModule, NgFor, NgIf, UpperCasePipe } from '@angular/common';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fridge', component: FridgeComponent },
-      { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
+      { path: 'fetch-data', component: FetchDataComponent },
+      { path: 'recipe', component: RecipeComponent },
     ])
   ],
   providers: [
