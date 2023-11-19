@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { FridgeService } from '../../../src/services/fridge.service';
+import { FridgeService } from '../../../src/services/fridge/fridge.service';
 
 @Component({
   selector: 'app-fridge-component',
@@ -19,7 +19,7 @@ export class FridgeComponent implements OnInit{
     if (this.addedIngredients.has(""))
     {
       this.addedIngredients.clear()
-    };    
+    };
   }
 
   public addIngredient(ingredient: string): void {
