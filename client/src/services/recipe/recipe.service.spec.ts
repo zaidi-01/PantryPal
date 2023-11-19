@@ -1,6 +1,9 @@
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { RecipeService, Recipe } from './recipe.service';
+import { Recipe, RecipeService } from './recipe.service';
 
 describe('RecipeService', () => {
   let service: RecipeService;
@@ -9,7 +12,7 @@ describe('RecipeService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [RecipeService]
+      providers: [RecipeService],
     });
     service = TestBed.inject(RecipeService);
     httpMock = TestBed.inject(HttpTestingController);
@@ -19,7 +22,7 @@ describe('RecipeService', () => {
     httpMock.verify();
   });
 
-  it('should be created', () => {
+  it('should create', () => {
     expect(service).toBeTruthy();
   });
 
@@ -32,7 +35,7 @@ describe('RecipeService', () => {
       ingredients: 'Ingredient 1, Ingredient 2',
       directions: 'Step 1, Step 2',
       dateCreated: new Date(),
-      dateUpdated: new Date()
+      dateUpdated: new Date(),
     };
 
     service.getRecipe(recipeId).subscribe((recipe: Recipe) => {
