@@ -1,0 +1,21 @@
+<h1>PantryPal</h1>
+<p>Use the search bar below to search for any recipe</p>
+
+<form (ngSubmit)="onSearch(inputText)">
+  <div class="form-outline">
+    <i class="fas fa-search"></i>
+    <input
+      type="text"
+      class="form-control"
+      name="inputText"
+      [(ngModel)]="inputText"
+      placeholder="Search Recipe.."
+    />
+  </div>
+  <button type="submit">Search</button>
+</form>
+
+<app-recipe-list
+  [recipeList]="recipeList"
+  [searchedQuery]="searchText"
+></app-recipe-list>
