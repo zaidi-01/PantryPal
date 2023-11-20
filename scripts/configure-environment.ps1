@@ -8,6 +8,6 @@ foreach ($file in $configFiles) {
   foreach ($key in $configKeys) {
     $content = $content.Replace("`${{$key}}", $config.$key)
   }
-  $content | Set-Content -Path $file.FullName
+  $content | Set-Content -Path $file.FullName -NoNewline
   Write-Host "Updated $file"
 }
