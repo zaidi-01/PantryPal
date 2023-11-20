@@ -1,9 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
+using server.Models;
 
 namespace server.Controllers
 {
+  public class SearchModel
+  {
+    public string SearchQuery { get; set; }
+  }
+
+
   [ApiController]
   [Route("api/[controller]")]
   public class RecipeController : ControllerBase
@@ -30,6 +37,17 @@ namespace server.Controllers
       {
         return NotFound();
       }
+    }
+
+    [HttpPost]
+    [Route("search")]
+    public async Task<IActionResult> SearchRecipes([FromBody] SearchModel searchModel)
+    {
+      var recipes = await _context.Recipe
+        .Where(r => r.Name.ToLower().Contains(searchModel.SearchQuery.ToLower()))
+        .ToListAsync();
+
+      return Ok(recipes);
     }
   }
 }

@@ -7,17 +7,19 @@ import { RouterModule } from '@angular/router';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { AppComponent } from './app.component';
-import { FridgeComponent } from './fridge/fridge.component';
-import { HomeComponent } from './home/home.component';
+import { RecipeSearchComponent } from './recipe-search/recipe-search.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { RecipeComponent } from './recipe/recipe.component';
+import { FridgeComponent } from './fridge/fridge.component';
+import { RecipeListComponent } from './recipe-list/recipe-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
-    HomeComponent,
     FridgeComponent,
+    RecipeListComponent,
+    RecipeSearchComponent,
     RecipeComponent,
   ],
   imports: [
@@ -30,10 +32,10 @@ import { RecipeComponent } from './recipe/recipe.component';
     UpperCasePipe,
     ApiAuthorizationModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: '', component: RecipeSearchComponent, pathMatch: 'full' },
       { path: 'fridge', component: FridgeComponent },
-      { path: 'recipe', component: RecipeComponent },
-    ]),
+      { path: 'recipe', component: RecipeComponent},
+    ])
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
