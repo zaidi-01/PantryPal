@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Recipe, RecipeService } from '@services';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-recipe',
@@ -9,14 +10,21 @@ import { Recipe, RecipeService } from '@services';
 export class RecipeComponent {
   public recipe: Recipe = {} as Recipe;
 
-
-  //TODO(SteveShibly8): Replace with actual recipe ID
-  constructor(private recipeService: RecipeService) {
-    recipeService.getRecipe(1).subscribe(
-      (result) => {
-        this.recipe = result;
-      },
-      (error) => console.error(error)
-    );
+  constructor(
+    private recipeService: RecipeService,
+    private route: ActivatedRoute
+  ) {
+    this.route.paramMap.subscribe((params) => {
+      let recipeIdParam = params.get('id');
+      if (recipeIdParam !== null) {
+        let recipeId = +recipeIdParam;
+        this.recipeService.getRecipe(recipeId).subscribe(
+          (recipe) => {
+            this.recipe = recipe;
+          },
+          (error) => console.error(error)
+        );
+      }
+    });
   }
 }

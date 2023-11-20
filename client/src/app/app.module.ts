@@ -34,7 +34,7 @@ import { RecipeListComponent } from './recipe-list/recipe-list.component';
     RouterModule.forRoot([
       { path: '', component: RecipeSearchComponent, pathMatch: 'full' },
       { path: 'fridge', component: FridgeComponent },
-      { path: 'recipe', component: RecipeComponent},
+      { path: 'recipe/:id', component: RecipeComponent },
     ])
   ],
   providers: [
