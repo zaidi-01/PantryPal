@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FridgeService } from '@services';
+import { Ingredient, FridgeService } from '@services';
 
 @Component({
   selector: 'app-fridge-component',
@@ -7,10 +7,13 @@ import { FridgeService } from '@services';
   styleUrls:['./fridge.component.scss']
 })
 export class FridgeComponent implements OnInit{
-  constructor(private fridgeService: FridgeService) {}
+  constructor(private fridgeService: FridgeService) {
+    this.getIngredients();
+  }
 
   addedIngredients: Set<string> = this.fridgeService.getLocallyStoredIngredients();
-  availableIngredients = this.fridgeService.getAvailableIngredients();
+  availableIngredients: string[] = [];
+  apiIngredients: Ingredient[] = [];
 
   filteredItems: string[] = [];
   searchText = '';
@@ -19,7 +22,15 @@ export class FridgeComponent implements OnInit{
     if (this.addedIngredients.has(""))
     {
       this.addedIngredients.clear()
-    };
+    };    
+  }
+
+  private getIngredients(): void {
+    this.fridgeService.getIngredientsData().subscribe(ingredients => {
+      this.apiIngredients = ingredients as Ingredient[]
+      this.availableIngredients = this.apiIngredients.map(ingredient => ingredient.name).sort();
+    },
+    (error) => console.error(error));
   }
 
   public addIngredient(ingredient: string): void {
@@ -37,7 +48,6 @@ export class FridgeComponent implements OnInit{
   }
 
   public filterIngredients() {
-    console.log(this.searchText);
     this.filteredItems = this.availableIngredients.filter(item =>
       item.toLowerCase().startsWith(this.searchText.toLowerCase())
     );
@@ -46,8 +56,8 @@ export class FridgeComponent implements OnInit{
 
   private sortFilteredIngredients()
   {
-    const selectedIngredients = [...this.filteredItems].filter(item => this.addedIngredients.has(item)).sort();
-    const unselectedIngredients = [...this.filteredItems].filter(item => !Array.from(this.addedIngredients).includes(item)).sort();
+    const selectedIngredients = this.filteredItems.filter(item => this.addedIngredients.has(item)).sort();
+    const unselectedIngredients = this.filteredItems.filter(item => !Array.from(this.addedIngredients).includes(item)).sort();
 
     this.filteredItems = selectedIngredients.concat(unselectedIngredients);
   }

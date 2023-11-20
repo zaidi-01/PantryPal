@@ -1,42 +1,36 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import { HttpClientService } from './../http-client/http-client.service';
+import { Observable } from 'rxjs';
 
 export interface Ingredient {
+  id: number;
   name: string;
 }
-
-//Will be replaced with API, using for testing
-export const INGREDIENTS: Ingredient[] = [
-  {name: 'Really long ingredient name' },
-  {name: 'Chicken' },
-  {name: 'Rice' },
-  {name: 'Apple' },
-  {name: 'Lettuce' },
-  {name: 'Beans' },
-  {name: 'Potato' },
-  {name: 'Salt' },
-  {name: 'Sugar' },
-  {name: 'Flour' },
-  {name: 'Eggs' },
-  {name: 'Pepper' },
-];
-
 
 @Injectable({
   providedIn: 'root',
 })
 export class FridgeService {
-  constructor() {}
 
-  public getAvailableIngredients(): string[] {
-    //TODO: Replace when Backend API available
-    return [...INGREDIENTS].map((ingredient) => ingredient.name).sort();
+  public apiIngredientsList: Ingredient[] = [];
+
+  constructor(private httpClientService: HttpClientService) {
   }
 
-  public getLocallyStoredIngredients(): Set<string> {
-    const localIngredients = localStorage.getItem('userIngredients');
-    if (localIngredients != null) {
+  getIngredientsData(): Observable<Ingredient[]> 
+  {
+    return this.httpClientService.get<Ingredient[]>('fridge');
+  }
+
+  getLocallyStoredIngredients():  Set<string>
+  {
+    const localIngredients = localStorage.getItem("userIngredients");
+    if (localIngredients != null)
+    {
       return new Set<string>(localIngredients.split(','));
-    } else {
+    }
+    else
+    {
       return new Set<string>();
     }
   }
