@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
 using server.Models;
@@ -14,8 +12,11 @@ builder.Configuration.AddJsonFile(Path.Combine(configDirectory, $"appsettings.{b
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+if (connectionString != null)
+{
+  builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySQL(connectionString));
+}
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
