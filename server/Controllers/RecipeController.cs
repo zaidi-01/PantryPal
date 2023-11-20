@@ -24,10 +24,10 @@ namespace server.Controllers
 
     [HttpGet]
     [Route("{id:int}")]
-    public async Task<IActionResult> GetDetails(int id)
+    public async Task<IActionResult> GetRecipe(int id)
     {
       // TODO(StevieShibly8): Replace with stored-procedure
-      var recipe = await _context.Recipe.SingleOrDefaultAsync(r => r.Id == id);
+      var recipe = await _context.Recipe.FirstOrDefaultAsync(r => r.Id == id);
 
       if (recipe != null)
       {

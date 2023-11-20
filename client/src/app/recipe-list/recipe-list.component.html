@@ -11,7 +11,7 @@
       '{{ searchedQuery }}'
     </h3>
     <div *ngFor="let recipe of recipeList">
-      <a>{{ recipe.name }}</a>
+      <a [routerLink]="['/recipe', recipe.id]">{{ recipe.name }}</a>
     </div>
   </ng-template>
 </ng-container>

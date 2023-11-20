@@ -23,12 +23,8 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "allowedCommonJsDependencies": [
-              "oidc-client"
-            ],
-            "assets": [
-              "src/assets"
-            ],
+            "allowedCommonJsDependencies": ["oidc-client"],
+            "assets": ["src/assets"],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.scss"
@@ -72,10 +68,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "server:build:production"
+              "buildTarget": "server:build:production"
             },
             "development": {
-              "browserTarget": "server:build:development",
+              "buildTarget": "server:build:development",
               "proxyConfig": "proxy.conf.js"
             }
           },
@@ -84,7 +80,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "server:build"
+            "buildTarget": "server:build"
           }
         },
         "test": {
@@ -94,12 +90,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "assets": ["src/assets"],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
         },
@@ -132,7 +124,6 @@
       }
     }
   },
-  "defaultProject": "server",
   "cli": {
     "analytics": false
   }
