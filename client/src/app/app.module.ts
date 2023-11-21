@@ -7,11 +7,12 @@ import { RouterModule } from '@angular/router';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { AppComponent } from './app.component';
-import { RecipeSearchComponent } from './recipe-search/recipe-search.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { RecipeComponent } from './recipe/recipe.component';
 import { FridgeComponent } from './fridge/fridge.component';
+import { HomeComponent } from './home/home.component';
+import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
+import { RecipeSearchComponent } from './recipe-search/recipe-search.component';
+import { RecipeComponent } from './recipe/recipe.component';
 
 @NgModule({
   declarations: [
@@ -32,8 +33,9 @@ import { RecipeListComponent } from './recipe-list/recipe-list.component';
     UpperCasePipe,
     ApiAuthorizationModule,
     RouterModule.forRoot([
-      { path: '', component: RecipeSearchComponent, pathMatch: 'full' },
+      { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'fridge', component: FridgeComponent },
+      { path: 'search', component: RecipeSearchComponent },
       { path: 'recipe/:id', component: RecipeComponent },
     ])
   ],
