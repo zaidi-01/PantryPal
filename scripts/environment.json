@@ -3,5 +3,7 @@
   "db_port": 3306,
   "db_user": "",
   "db_pwd": "",
-  "db_name": ""
+  "db_name": "",
+  "admin_user": "admin",
+  "admin_pwd": ""
 }
