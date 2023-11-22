@@ -2,7 +2,7 @@
   <ng-container *ngIf="recipeList.length == 1; else moreThanOne">
     <h3>There is {{ recipeList.length }} recipe in the list.</h3>
     <div *ngFor="let recipe of recipeList">
-      <a [routerLink]="['/recipe', recipe.id]">{{ recipe.name }}</a>
+      <a [routerLink]="['/{{ appPaths.recipe }}', recipe.id]">{{ recipe.name }}</a>
     </div>
   </ng-container>
   <ng-template #moreThanOne>
@@ -11,7 +11,7 @@
       '{{ searchedQuery }}'
     </h3>
     <div *ngFor="let recipe of recipeList">
-      <a [routerLink]="['/recipe', recipe.id]">{{ recipe.name }}</a>
+      <a [routerLink]="['/{{ appPaths.recipe }}', recipe.id]">{{ recipe.name }}</a>
     </div>
   </ng-template>
 </ng-container>

@@ -3,16 +3,24 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
+import { ROUTES, RouterModule, Routes } from '@angular/router';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { AppComponent } from './app.component';
+import { ApplicationPaths } from './app.constants';
 import { FridgeComponent } from './fridge/fridge.component';
 import { HomeComponent } from './home/home.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
 import { RecipeSearchComponent } from './recipe-search/recipe-search.component';
 import { RecipeComponent } from './recipe/recipe.component';
+
+const buildRoutes = (appPaths: ApplicationPaths): Routes => [
+  { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: appPaths.fridge, component: FridgeComponent },
+  { path: appPaths.search, component: RecipeSearchComponent },
+  { path: `${appPaths.recipe}/:id`, component: RecipeComponent },
+];
 
 @NgModule({
   declarations: [
@@ -32,15 +40,17 @@ import { RecipeComponent } from './recipe/recipe.component';
     NgFor,
     UpperCasePipe,
     ApiAuthorizationModule,
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'fridge', component: FridgeComponent },
-      { path: 'search', component: RecipeSearchComponent },
-      { path: 'recipe/:id', component: RecipeComponent },
-    ])
+    RouterModule.forRoot([]),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
+    { provide: ApplicationPaths, useClass: ApplicationPaths },
+    {
+      provide: ROUTES,
+      useFactory: buildRoutes,
+      deps: [ApplicationPaths],
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

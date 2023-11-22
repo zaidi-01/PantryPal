@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Recipe, RecipeService } from '@services';
+import { Recipe } from '@services';
+import { ApplicationPaths } from '../app.constants';
 
 @Component({
   selector: 'app-recipe-list',
@@ -10,7 +11,7 @@ export class RecipeListComponent {
   @Input() public searchedQuery: string = '';
   @Input() public recipeList: Recipe[] = [];
 
-  constructor(private recipeService: RecipeService) {}
-  
+  constructor(public appPaths: ApplicationPaths) {}
+
   //TODO : filter and sort has to be implemented
 }
