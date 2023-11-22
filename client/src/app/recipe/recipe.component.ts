@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Recipe, RecipeService } from '@services';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { filter, map, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-recipe',
@@ -14,17 +15,16 @@ export class RecipeComponent {
     private recipeService: RecipeService,
     private route: ActivatedRoute
   ) {
-    this.route.paramMap.subscribe((params) => {
-      let recipeIdParam = params.get('id');
-      if (recipeIdParam !== null) {
-        let recipeId = +recipeIdParam;
-        this.recipeService.getRecipe(recipeId).subscribe(
-          (recipe) => {
-            this.recipe = recipe;
-          },
-          (error) => console.error(error)
-        );
-      }
-    });
+    this.route.paramMap
+      .pipe(
+        map((params: ParamMap) => params.get('id')),
+        filter((id: string | null): id is string => id !== null),
+        map((id: string) => +id),
+        switchMap((id: number) => this.recipeService.getRecipe(id))
+      )
+      .subscribe(
+        (recipe: Recipe) => (this.recipe = recipe),
+        (error) => console.error(error)
+      );
   }
 }
