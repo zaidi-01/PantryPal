@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { ROUTES, RouterModule, Routes } from '@angular/router';
+import { AdminModule } from 'src/admin/admin.module';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { AppComponent } from './app.component';
@@ -36,6 +37,7 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
     HttpClientModule,
     FormsModule,
     CommonModule,
+    AdminModule,
     NgIf,
     NgFor,
     UpperCasePipe,
