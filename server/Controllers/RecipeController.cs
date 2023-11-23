@@ -10,7 +10,6 @@ namespace server.Controllers
     public string SearchQuery { get; set; }
   }
 
-
   [ApiController]
   [Route("api/[controller]")]
   public class RecipeController : ControllerBase
@@ -29,14 +28,8 @@ namespace server.Controllers
       // TODO(StevieShibly8): Replace with stored-procedure
       var recipe = await _context.Recipe.FirstOrDefaultAsync(r => r.Id == id);
 
-      if (recipe != null)
-      {
-        return Ok(recipe);
-      }
-      else
-      {
-        return NotFound();
-      }
+      if (recipe != null) return Ok(recipe);
+      else return NotFound();
     }
 
     [HttpPost]

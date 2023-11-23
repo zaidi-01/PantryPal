@@ -15,7 +15,22 @@
   <button type="submit">Search</button>
 </form>
 
-<app-recipe-list
-  [recipeList]="recipeList"
-  [searchedQuery]="searchText"
-></app-recipe-list>
+<ng-container *ngIf="isLoading">
+  <h2>Loading...</h2>
+</ng-container>
+
+<ng-container *ngIf="!isLoading">
+  <ng-container *ngIf="recipeList.length === 0 && searchedQuery !== ''">
+    <h2>No recipes found for "{{ searchedQuery }}"</h2>
+  </ng-container>
+
+  <ng-container *ngIf="recipeList.length === 1">
+    <h2>1 recipe found for "{{ searchedQuery }}"</h2>
+  </ng-container>
+
+  <ng-container *ngIf="recipeList.length > 1">
+    <h2>{{ recipeList.length }} recipes found for "{{ searchedQuery }}"</h2>
+  </ng-container>
+
+  <app-recipe-list [recipeList]="recipeList"> </app-recipe-list>
+</ng-container>
