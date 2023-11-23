@@ -8,10 +8,7 @@ import { ApplicationPaths } from '../app.constants';
   styleUrls: ['./recipe-list.component.scss'],
 })
 export class RecipeListComponent {
-  @Input() public searchedQuery: string = '';
   @Input() public recipeList: Recipe[] = [];
 
   constructor(public appPaths: ApplicationPaths) {}
-
-  //TODO : filter and sort has to be implemented
 }
