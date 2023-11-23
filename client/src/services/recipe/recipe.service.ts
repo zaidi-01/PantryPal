@@ -30,7 +30,7 @@ export class RecipeService {
 
   public searchRecipes(searchQuery: string): Observable<Recipe[]> {
     return this.httpClientService.post<Recipe[]>('recipe/search', {
-      searchQuery,
+      searchQuery: searchQuery
     });
   }
 }
