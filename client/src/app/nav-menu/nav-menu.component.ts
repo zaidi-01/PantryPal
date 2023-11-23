@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ApplicationPaths } from '../app.constants';
 
 @Component({
   selector: 'app-nav-menu',
@@ -8,7 +9,7 @@ import { Component } from '@angular/core';
 export class NavMenuComponent {
   isExpanded = false;
 
-  constructor() {}
+  constructor(public appPaths: ApplicationPaths) {}
 
   collapse() {
     this.isExpanded = false;

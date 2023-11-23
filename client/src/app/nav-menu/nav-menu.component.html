@@ -21,10 +21,14 @@
       >
         <ul class="navbar-nav flex-grow">
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/fridge']">Fridge</a>
+            <a
+              class="nav-link text-dark"
+              [routerLink]="['/', appPaths.fridge]"
+            >
+              Fridge
+            </a>
           </li>
         </ul>
-        <app-login-menu></app-login-menu>
       </div>
     </div>
   </nav>
