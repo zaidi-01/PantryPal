@@ -7,6 +7,7 @@ import { ROUTES, RouterModule, Routes } from '@angular/router';
 import { AdminModule } from 'src/admin/admin.module';
 import { ScrollingModule } from '@angular/cdk/scrolling'; 
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
+import { anonymousGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { AppComponent } from './app.component';
 import { ApplicationPaths } from './app.constants';
@@ -19,9 +20,21 @@ import { RecipeComponent } from './recipe/recipe.component';
 
 const buildRoutes = (appPaths: ApplicationPaths): Routes => [
   { path: '', component: HomeComponent, pathMatch: 'full' },
-  { path: appPaths.fridge, component: FridgeComponent },
-  { path: appPaths.search, component: RecipeSearchComponent },
-  { path: `${appPaths.recipe}/:id`, component: RecipeComponent },
+  {
+    path: appPaths.fridge,
+    component: FridgeComponent,
+    canActivate: [anonymousGuard],
+  },
+  {
+    path: appPaths.search,
+    component: RecipeSearchComponent,
+    canActivate: [anonymousGuard],
+  },
+  {
+    path: `${appPaths.recipe}/:id`,
+    component: RecipeComponent,
+    canActivate: [anonymousGuard],
+  },
 ];
 
 @NgModule({
