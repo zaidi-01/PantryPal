@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Recipe, RecipeService } from '@services';
 import { Observable, Subject, finalize, switchMap, tap } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search',
@@ -16,6 +17,9 @@ export class RecipeSearchComponent {
 
   constructor(private recipeService: RecipeService) {
     this.recipeList$ = this.inputText$.pipe(
+      distinctUntilChanged(
+        (prev, curr) => prev.toLowerCase() === curr.toLowerCase()
+      ),
       tap((_) => (this.isLoading = true)),
       switchMap((inputText: string) =>
         this.recipeService
