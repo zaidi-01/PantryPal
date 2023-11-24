@@ -4,19 +4,21 @@ import { Ingredient, FridgeService } from '@services';
 @Component({
   selector: 'app-fridge-component',
   templateUrl: './fridge.component.html',
-  styleUrls:['./fridge.component.scss']
+  styleUrls:['./fridge.component.scss'],
 })
 export class FridgeComponent implements OnInit{
-  constructor(private fridgeService: FridgeService) {
-    this.getIngredients();
-  }
 
+  
   addedIngredients: Set<string> = this.fridgeService.getLocallyStoredIngredients();
   availableIngredients: string[] = [];
   apiIngredients: Ingredient[] = [];
 
   filteredItems: string[] = [];
   searchText = '';
+
+  constructor(private fridgeService: FridgeService) {
+    this.getIngredients();
+  }
 
   ngOnInit(): void {
     if (this.addedIngredients.has(""))
