@@ -26,8 +26,8 @@
 </ng-container>
 
 <ng-container *ngIf="searchText">
-  <div class="row">
-    <div class="col-md-3" *ngFor="let ingredient of filteredItems">
+  <cdk-virtual-scroll-viewport class="ingredient-viewport" itemSize="25">
+    <div *cdkVirtualFor ="let ingredient of filteredItems">
       <div
         class="ingredient available-ingredient"
         [class.added-ingredient]="addedIngredients.has(ingredient)"
@@ -50,11 +50,11 @@
         </button>
       </div>
     </div>
-  </div>
+  </cdk-virtual-scroll-viewport>
 </ng-container>
-<ng-container *ngIf="!searchText">
-  <div class="row">
-    <div class="col-md-3" *ngFor="let ingredient of addedIngredients">
+<ng-container *ngIf="!searchText"> 
+  <cdk-virtual-scroll-viewport class="ingredient-viewport" itemSize="25">
+    <div *cdkVirtualFor="let ingredient of addedIngredients">
       <div class="ingredient added-ingredient">
         <span class="text">{{ ingredient }}</span>
         <button
@@ -65,5 +65,5 @@
         </button>
       </div>
     </div>
-  </div>
+  </cdk-virtual-scroll-viewport>
 </ng-container>

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { ROUTES, RouterModule, Routes } from '@angular/router';
 import { AdminModule } from 'src/admin/admin.module';
+import { ScrollingModule } from '@angular/cdk/scrolling'; 
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { AppComponent } from './app.component';
@@ -38,6 +39,7 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
     FormsModule,
     CommonModule,
     AdminModule,
+    ScrollingModule,
     NgIf,
     NgFor,
     UpperCasePipe,
