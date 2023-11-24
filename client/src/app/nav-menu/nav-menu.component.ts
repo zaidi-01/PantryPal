@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ApplicationPaths } from '../app.constants';
+import { Observable } from 'rxjs';
+import { AuthorizeService } from 'src/api-authorization/authorize.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -8,8 +10,11 @@ import { ApplicationPaths } from '../app.constants';
 })
 export class NavMenuComponent {
   isExpanded = false;
+  isAuthenticated$: Observable<boolean>;
 
-  constructor(public appPaths: ApplicationPaths) {}
+  constructor(public appPaths: ApplicationPaths, authorizeService: AuthorizeService) {
+    this.isAuthenticated$ = authorizeService.isAuthenticated();
+  }
 
   collapse() {
     this.isExpanded = false;
