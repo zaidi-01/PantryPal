@@ -19,7 +19,7 @@
   <h2>Loading...</h2>
 </ng-container>
 
-<ng-container *ngIf="!isLoading">
+<ng-container *ngIf="!isLoading && (recipeList$ | async) as recipeList">
   <ng-container *ngIf="recipeList.length === 0 && searchedQuery !== ''">
     <h2>No recipes found for "{{ searchedQuery }}"</h2>
   </ng-container>

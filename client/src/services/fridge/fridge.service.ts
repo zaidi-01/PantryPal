@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClientService } from './../http-client/http-client.service';
 import { Observable } from 'rxjs';
 
@@ -11,26 +11,19 @@ export interface Ingredient {
   providedIn: 'root',
 })
 export class FridgeService {
-
   public apiIngredientsList: Ingredient[] = [];
 
-  constructor(private httpClientService: HttpClientService) {
-  }
+  constructor(private httpClientService: HttpClientService) {}
 
-  getIngredientsData(): Observable<Ingredient[]> 
-  {
+  getIngredientsData(): Observable<Ingredient[]> {
     return this.httpClientService.get<Ingredient[]>('fridge');
   }
 
-  getLocallyStoredIngredients():  Set<string>
-  {
-    const localIngredients = localStorage.getItem("userIngredients");
-    if (localIngredients != null)
-    {
+  getLocallyStoredIngredients(): Set<string> {
+    const localIngredients = localStorage.getItem('userIngredients');
+    if (localIngredients != null) {
       return new Set<string>(localIngredients.split(','));
-    }
-    else
-    {
+    } else {
       return new Set<string>();
     }
   }

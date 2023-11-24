@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Recipe, RecipeService } from '@services';
-
-const TIMEOUT = 1000;
+import { Observable, Subject, finalize, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -11,21 +10,23 @@ const TIMEOUT = 1000;
 export class RecipeSearchComponent {
   public searchedQuery = '';
   public inputText = '';
-  public recipeList: Recipe[] = [];
   public isLoading: boolean = false;
+  public recipeList$: Observable<Recipe[]>;
+  private inputText$: Subject<string> = new Subject();
 
-  constructor(private recipeService: RecipeService) {}
+  constructor(private recipeService: RecipeService) {
+    this.recipeList$ = this.inputText$.pipe(
+      tap((_) => (this.isLoading = true)),
+      switchMap((inputText: string) =>
+        this.recipeService
+          .searchRecipes(inputText)
+          .pipe(finalize(() => (this.isLoading = false)))
+      )
+    );
+  }
 
-  onSearch(searchQuery: string) {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.recipeService
-        .searchRecipes(searchQuery)
-        .subscribe((recipeList: Recipe[]) => {
-          this.recipeList = recipeList;
-          this.isLoading = false;
-          this.searchedQuery = searchQuery;
-        });
-    }, TIMEOUT);
+  public onSearch(searchQuery: string) {
+    this.searchedQuery = searchQuery;
+    this.inputText$.next(searchQuery);
   }
 }
