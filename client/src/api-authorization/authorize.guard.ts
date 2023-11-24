@@ -12,7 +12,7 @@ import {
 } from './api-authorization.constants';
 import { AuthorizeService } from './authorize.service';
 
-export const AuthGuard: CanActivateFn = (
+export const authGuard: CanActivateFn = (
   _route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
 ) => {

@@ -34,12 +34,10 @@ void ConfigureAppSettings(WebApplicationBuilder builder)
 void ConfigureServices(WebApplicationBuilder builder)
 {
   var config = builder.Configuration;
-  var connectionString = config.GetConnectionString("DefaultConnection");
-  if (connectionString != null)
-  {
-    builder.Services.AddDbContext<ApplicationDbContext>(options =>
-      options.UseMySQL(connectionString));
-  }
+  var connectionString = config.GetConnectionString("DefaultConnection") ?? throw new Exception("Could not find connection string");
+
+  builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseMySQL(connectionString));
   builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
   builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -50,6 +48,14 @@ void ConfigureServices(WebApplicationBuilder builder)
 
   builder.Services.AddAuthentication()
     .AddIdentityServerJwt();
+
+  builder.Services.ConfigureApplicationCookie(options =>
+  {
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+    options.LoginPath = "/Identity/Account/Login";
+    options.SlidingExpiration = true;
+  });
 
   builder.Services.AddControllersWithViews();
   builder.Services.AddRazorPages();
