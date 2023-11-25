@@ -1,6 +1,6 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { take } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { ApplicationPaths } from 'src/api-authorization/api-authorization.constants';
 import { AuthorizeService } from 'src/api-authorization/authorize.service';
 
@@ -9,15 +9,22 @@ import { AuthorizeService } from 'src/api-authorization/authorize.service';
   templateUrl: './admin-session-indicator.component.html',
   styleUrl: './admin-session-indicator.component.scss',
 })
-export class AdminSessionIndicatorComponent {
+export class AdminSessionIndicatorComponent implements OnDestroy {
   @HostBinding('hidden')
   private isHidden = true;
+
+  private destroy$ = new Subject<void>();
 
   constructor(private router: Router, authorizeService: AuthorizeService) {
     authorizeService
       .isAuthenticated()
-      .pipe(take(1))
+      .pipe(takeUntil(this.destroy$))
       .subscribe((isAuthenticated) => (this.isHidden = !isAuthenticated));
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   logout() {
