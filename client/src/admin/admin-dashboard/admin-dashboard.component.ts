@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ApplicationPaths } from 'src/app/app.constants';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./admin-dashboard.component.scss'],
 })
 export class AdminDashboardComponent {
-  constructor() {}
+  constructor(public appPaths: ApplicationPaths) {}
 }
