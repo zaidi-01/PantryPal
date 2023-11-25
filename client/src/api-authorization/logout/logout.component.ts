@@ -18,7 +18,7 @@ import {
 @Component({
   selector: 'app-logout',
   templateUrl: './logout.component.html',
-  styleUrls: ['./logout.component.scss'],
+  styleUrl: './logout.component.scss',
 })
 export class LogoutComponent implements OnInit {
   public message = new BehaviorSubject<string | null>(null);
