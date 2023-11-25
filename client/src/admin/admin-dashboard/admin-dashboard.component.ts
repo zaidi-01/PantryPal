@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
+import { ApplicationPaths } from 'src/app/app.constants';
 
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
-  styleUrls: ['./admin-dashboard.component.scss'],
+  styleUrl: './admin-dashboard.component.scss',
 })
 export class AdminDashboardComponent {
-  constructor() {}
+  constructor(public appPaths: ApplicationPaths) {}
 }

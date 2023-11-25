@@ -18,7 +18,7 @@ import {
 @Component({
   selector: 'app-logout',
   templateUrl: './logout.component.html',
-  styleUrls: ['./logout.component.scss'],
+  styleUrl: './logout.component.scss',
 })
 export class LogoutComponent implements OnInit {
   public message = new BehaviorSubject<string | null>(null);
@@ -34,7 +34,7 @@ export class LogoutComponent implements OnInit {
     switch (action.path) {
       case LogoutActions.Logout:
         if (!!window.history.state.local) {
-          await this.logout(this.getReturnUrl());
+          await this.logout(this.getReturnUrl(window.history.state));
         } else {
           // This prevents regular links to <app>/authentication/logout from triggering a logout
           this.message.next(

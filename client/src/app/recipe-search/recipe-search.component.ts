@@ -6,7 +6,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 @Component({
   selector: 'app-search',
   templateUrl: './recipe-search.component.html',
-  styleUrls: ['./recipe-search.component.scss'],
+  styleUrl: './recipe-search.component.scss',
 })
 export class RecipeSearchComponent {
   public searchedQuery = '';

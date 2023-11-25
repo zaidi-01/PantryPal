@@ -6,7 +6,7 @@ import { filter, map, switchMap } from 'rxjs';
 @Component({
   selector: 'app-recipe',
   templateUrl: `./recipe.component.html`,
-  styleUrls: ['./recipe.component.scss'],
+  styleUrl: './recipe.component.scss',
 })
 export class RecipeComponent {
   public recipe: Recipe = {} as Recipe;
