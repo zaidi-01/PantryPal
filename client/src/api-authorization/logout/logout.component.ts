@@ -34,7 +34,7 @@ export class LogoutComponent implements OnInit {
     switch (action.path) {
       case LogoutActions.Logout:
         if (!!window.history.state.local) {
-          await this.logout(this.getReturnUrl());
+          await this.logout(this.getReturnUrl(window.history.state));
         } else {
           // This prevents regular links to <app>/authentication/logout from triggering a logout
           this.message.next(
