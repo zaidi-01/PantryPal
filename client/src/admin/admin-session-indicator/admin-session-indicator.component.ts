@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import { Router } from '@angular/router';
+import { take } from 'rxjs';
 import { ApplicationPaths } from 'src/api-authorization/api-authorization.constants';
+import { AuthorizeService } from 'src/api-authorization/authorize.service';
 
 @Component({
   selector: 'app-admin-session-indicator',
@@ -8,7 +10,15 @@ import { ApplicationPaths } from 'src/api-authorization/api-authorization.consta
   styleUrl: './admin-session-indicator.component.scss',
 })
 export class AdminSessionIndicatorComponent {
-  constructor(private router: Router) {}
+  @HostBinding('hidden')
+  private isHidden = true;
+
+  constructor(private router: Router, authorizeService: AuthorizeService) {
+    authorizeService
+      .isAuthenticated()
+      .pipe(take(1))
+      .subscribe((isAuthenticated) => (this.isHidden = !isAuthenticated));
+  }
 
   logout() {
     this.router.navigate(ApplicationPaths.LogOutPathComponents, {
