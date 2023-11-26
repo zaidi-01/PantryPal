@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NEVER, Observable, finalize } from 'rxjs';
+import { NEVER, Observable, finalize, tap } from 'rxjs';
 
 @Component({
   selector: 'app-recipe-id-input',
@@ -30,10 +30,8 @@ export class RecipeIdInputComponent {
     this.deleteRecipeForm.disable();
     this.onSubmit(this.recipeIdControl.value ?? '')
       .pipe(
-        finalize(() => {
-          this.deleteRecipeForm.reset();
-          this.deleteRecipeForm.enable();
-        })
+        tap(() => this.deleteRecipeForm.reset()),
+        finalize(() => this.deleteRecipeForm.enable())
       )
       .subscribe();
   }
