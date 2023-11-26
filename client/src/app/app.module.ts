@@ -1,14 +1,16 @@
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule, NgFor, NgIf, UpperCasePipe } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 import { BrowserModule } from '@angular/platform-browser';
 import { ROUTES, RouterModule, Routes } from '@angular/router';
 import { AdminModule } from 'src/admin/admin.module';
-import { ScrollingModule } from '@angular/cdk/scrolling'; 
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { anonymousGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
+import { AlertComponent } from './alert/alert.component';
 import { AppComponent } from './app.component';
 import { ApplicationPaths } from './app.constants';
 import { FridgeComponent } from './fridge/fridge.component';
@@ -35,6 +37,10 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
     component: RecipeComponent,
     canActivate: [anonymousGuard],
   },
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];
 
 @NgModule({
@@ -45,12 +51,14 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
     RecipeListComponent,
     RecipeSearchComponent,
     RecipeComponent,
+    AlertComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     CommonModule,
+    MatIconModule,
     AdminModule,
     ScrollingModule,
     NgIf,

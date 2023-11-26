@@ -1,0 +1,23 @@
+<div class="row h-100">
+  <form
+    class="col col-md-6 col-lg-4 m-auto"
+    [formGroup]="deleteRecipeForm"
+    (ngSubmit)="onSubmitInternal()"
+  >
+    <div>
+      <input
+        type="text"
+        class="form-control"
+        [class.is-invalid]="recipeIdControl.touched && recipeIdControl.invalid"
+        placeholder="Recipe ID"
+        [formControlName]="recipeIdControlName"
+      />
+      <span *ngIf="recipeIdControl.errors?.required" class="invalid-feedback">
+        Recipe ID is required
+      </span>
+      <span *ngIf="recipeIdControl.errors?.pattern" class="invalid-feedback">
+        Recipe ID must be a number
+      </span>
+    </div>
+  </form>
+</div>
