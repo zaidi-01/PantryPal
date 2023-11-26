@@ -1,6 +1,6 @@
-import { HttpClientService } from './../http-client/http-client.service';
 import { Injectable } from '@angular/core';
-import { Observable, tap, BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
+import { HttpClientService } from './../http-client/http-client.service';
 
 export interface Recipe {
   id: number;
@@ -31,7 +31,11 @@ export class RecipeService {
 
   public searchRecipes(searchQuery: string): Observable<Recipe[]> {
     return this.httpClientService.post<Recipe[]>('recipe/search', {
-      searchQuery: searchQuery
+      searchQuery: searchQuery,
     });
+  }
+
+  public deleteRecipe(id: number): Observable<void> {
+    return this.httpClientService.delete(`recipe/${id}`);
   }
 }

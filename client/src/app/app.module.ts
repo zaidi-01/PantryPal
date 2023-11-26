@@ -1,3 +1,4 @@
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule, NgFor, NgIf, UpperCasePipe } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -5,7 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { ROUTES, RouterModule, Routes } from '@angular/router';
 import { AdminModule } from 'src/admin/admin.module';
-import { ScrollingModule } from '@angular/cdk/scrolling'; 
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { anonymousGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
@@ -34,6 +34,10 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
     path: `${appPaths.recipe}/:id`,
     component: RecipeComponent,
     canActivate: [anonymousGuard],
+  },
+  {
+    path: '**',
+    redirectTo: '',
   },
 ];
 
