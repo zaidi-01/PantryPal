@@ -1,0 +1,14 @@
+:host {
+  display: block;
+}
+
+.recipe-details {
+  padding: 20px;
+}
+
+.recipe-name {
+  box-shadow: 0 2px 4px rgba(82, 3, 3, 0.675);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
