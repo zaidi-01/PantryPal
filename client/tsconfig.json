@@ -18,7 +18,8 @@
     "lib": ["es2018", "dom"],
     "paths": {
       "@services": ["src/services"],
-      "@interfaces": ["src/interfaces"]
+      "@interfaces": ["src/interfaces"],
+      "@enums": ["src/enums"]
     },
     "useDefineForClassFields": false
   },
