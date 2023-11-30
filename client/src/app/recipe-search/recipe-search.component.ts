@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Recipe, RecipeService } from '@services';
+import { Recipe } from '@interfaces';
+import { RecipeService } from '@services';
 import { Observable, Subject, finalize, switchMap, tap } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 

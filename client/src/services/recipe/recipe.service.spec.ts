@@ -3,7 +3,8 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { Recipe, RecipeService } from './recipe.service';
+import { Recipe } from '@interfaces';
+import { RecipeService } from './recipe.service';
 
 describe('RecipeService', () => {
   let service: RecipeService;

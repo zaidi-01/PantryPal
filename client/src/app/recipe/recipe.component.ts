@@ -1,7 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Recipe, RecipeService } from '@services';
+import { Recipe } from '@interfaces';
+import { RecipeService } from '@services';
 import {
   Observable,
   catchError,

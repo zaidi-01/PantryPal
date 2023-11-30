@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Alert, AlertService } from '@services';
+import { Alert } from '@interfaces';
+import { AlertService } from '@services';
 import { Observable } from 'rxjs';
 
 @Component({

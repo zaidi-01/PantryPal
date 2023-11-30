@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Ingredient, FridgeService } from '@services';
+import { Ingredient } from '@interfaces';
+import { FridgeService } from '@services';
 
 @Component({
   selector: 'app-fridge-component',
