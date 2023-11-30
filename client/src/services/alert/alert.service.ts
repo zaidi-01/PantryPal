@@ -1,16 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
+import { Alert } from '@interfaces';
 import { Subject, filter } from 'rxjs';
-
-/**
- * Represents an alert message.
- */
-export interface Alert {
-  /** The type of alert. */
-  type: 'success' | 'error' | 'info' | 'warning';
-  /** The message to display. */
-  message: string;
-}
 
 /**
  * Service for displaying alert messages.

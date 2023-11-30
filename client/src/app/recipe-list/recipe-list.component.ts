@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Recipe } from '@services';
+import { Recipe } from '@interfaces';
 import { ApplicationPaths } from '../app.constants';
 
 @Component({

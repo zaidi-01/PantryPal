@@ -1,7 +1,18 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { Recipe, RecipeService } from '@services';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { filter, map, switchMap } from 'rxjs';
+import { Recipe } from '@interfaces';
+import { RecipeService } from '@services';
+import {
+  Observable,
+  catchError,
+  distinct,
+  filter,
+  finalize,
+  map,
+  switchMap,
+  tap
+} from 'rxjs';
 
 @Component({
   selector: 'app-recipe',
@@ -9,22 +20,33 @@ import { filter, map, switchMap } from 'rxjs';
   styleUrl: './recipe.component.scss',
 })
 export class RecipeComponent {
-  public recipe: Recipe = {} as Recipe;
+  isLoading = true;
+  error?: string;
+  recipe$: Observable<Recipe>;
 
-  constructor(
-    private recipeService: RecipeService,
-    private route: ActivatedRoute
-  ) {
-    this.route.paramMap
-      .pipe(
-        map((params: ParamMap) => params.get('id')),
-        filter((id: string | null): id is string => id !== null),
-        map((id: string) => +id),
-        switchMap((id: number) => this.recipeService.getRecipe(id))
-      )
-      .subscribe(
-        (recipe: Recipe) => (this.recipe = recipe),
-        (error) => console.error(error)
-      );
+  constructor(recipeService: RecipeService, route: ActivatedRoute) {
+    this.recipe$ = route.paramMap.pipe(
+      map((params: ParamMap) => params.get('id')),
+      distinct(),
+      filter((id: string | null): id is string => id !== null),
+      map((id: string) => +id),
+      tap(() => {
+        this.isLoading = true;
+        this.error = undefined;
+      }),
+      switchMap((id: number) =>
+        recipeService
+          .getRecipe(id)
+          .pipe(finalize(() => (this.isLoading = false)))
+      ),
+      catchError((error) => {
+        if (error instanceof HttpErrorResponse && error.status === 404) {
+          this.error = 'Recipe not found';
+        } else {
+          this.error = 'An error occurred';
+        }
+        return [];
+      })
+    );
   }
 }

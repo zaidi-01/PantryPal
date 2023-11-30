@@ -1,16 +1,7 @@
 import { Injectable } from '@angular/core';
+import { Ingredient } from '@interfaces';
 import { Observable } from 'rxjs';
 import { HttpClientService } from './../http-client/http-client.service';
-
-/**
- * Represents an ingredient in the fridge.
- */
-export interface Ingredient {
-  /** The ID of the ingredient. */
-  id: number;
-  /** The name of the ingredient. */
-  name: string;
-}
 
 /**
  * Service for managing the fridge.

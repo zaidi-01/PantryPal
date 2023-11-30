@@ -10,6 +10,7 @@ import { AdminModule } from 'src/admin/admin.module';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { anonymousGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
+import { SharedModule } from 'src/shared/shared.module';
 import { AlertComponent } from './alert/alert.component';
 import { AppComponent } from './app.component';
 import { ApplicationPaths } from './app.constants';
@@ -60,6 +61,7 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
     CommonModule,
     MatIconModule,
     AdminModule,
+    SharedModule,
     ScrollingModule,
     NgIf,
     NgFor,

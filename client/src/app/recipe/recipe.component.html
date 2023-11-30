@@ -1,93 +1,10 @@
-<div class="loading-container">
-  <p *ngIf="!recipe"><em>Loading...</em></p>
-</div>
+<app-spinner *ngIf="isLoading" class="h-75"></app-spinner>
 
-<div class="recipe-details" *ngIf="recipe">
-  <div class="recipe-name">
-    <h1>{{ recipe.name }}</h1>
-  </div>
-  <br />
+<app-error *ngIf="error" class="h-75" [error]="error"></app-error>
 
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Description:</strong></div>
-    <div class="attribute-value">{{ recipe.description }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Ingredients:</strong></div>
-    <div class="attribute-value">{{ recipe.ingredients }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Directions:</strong></div>
-    <div class="attribute-value">{{ recipe.directions }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Date Created:</strong></div>
-    <div class="attribute-value">{{ recipe.dateCreated }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Date Updated:</strong></div>
-    <div class="attribute-value">{{ recipe.dateUpdated }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Image:</strong></div>
-    <div class="attribute-value">{{ recipe.image }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Categories:</strong></div>
-    <div class="attribute-value">{{ recipe.categories }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Cook Time:</strong></div>
-    <div class="attribute-value">{{ recipe.cookTime }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Prep Time:</strong></div>
-    <div class="attribute-value">{{ recipe.prepTime }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Total Time:</strong></div>
-    <div class="attribute-value">{{ recipe.totalTime }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Yield:</strong></div>
-    <div class="attribute-value">{{ recipe.yield }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Servings:</strong></div>
-    <div class="attribute-value">{{ recipe.servings }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Calories:</strong></div>
-    <div class="attribute-value">{{ recipe.calories }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Dietary Restrictions:</strong></div>
-    <div class="attribute-value">{{ recipe.dietaryRestrictions }}</div>
-  </div>
-</div>
+<ng-container *ngIf="recipe$ | async as recipe">
+  <app-recipe-details
+    *ngIf="!isLoading && !error"
+    [recipe]="recipe"
+  ></app-recipe-details>
+</ng-container>
