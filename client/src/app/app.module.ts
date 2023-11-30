@@ -10,17 +10,16 @@ import { AdminModule } from 'src/admin/admin.module';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { anonymousGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
+import { SharedModule } from 'src/shared/shared.module';
 import { AlertComponent } from './alert/alert.component';
 import { AppComponent } from './app.component';
 import { ApplicationPaths } from './app.constants';
 import { FridgeComponent } from './fridge/fridge.component';
 import { HomeComponent } from './home/home.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { RecipeDetailsComponent } from './recipe-details/recipe-details.component';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
 import { RecipeSearchComponent } from './recipe-search/recipe-search.component';
 import { RecipeComponent } from './recipe/recipe.component';
-import { SharedModule } from 'src/shared/shared.module';
 
 const buildRoutes = (appPaths: ApplicationPaths): Routes => [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -54,7 +53,6 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
     RecipeSearchComponent,
     RecipeComponent,
     AlertComponent,
-    RecipeDetailsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
