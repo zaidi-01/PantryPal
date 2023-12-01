@@ -44,7 +44,7 @@ export class FridgeComponent implements OnInit{
   }
 
   public deleteIngredient(ingredient: string): void {
-    this.addedIngredients.delete(ingredient);
+    this.addedIngredients = new Set([...this.addedIngredients].filter(item => item !== ingredient));
     localStorage.setItem("userIngredients",Array.from(this.addedIngredients).toString());
 
     this.sortFilteredIngredients();
