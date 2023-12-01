@@ -1,6 +1,10 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
+using server.DTOs;
+using server.Models;
 
 namespace server.Controllers
 {
@@ -17,6 +21,7 @@ namespace server.Controllers
   public class RecipeController : ControllerBase
   {
     private readonly ApplicationDbContext _context;
+    private readonly MapperConfiguration _mapperConfiguration;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RecipeController"/> class.
@@ -25,7 +30,16 @@ namespace server.Controllers
     public RecipeController(ApplicationDbContext context)
     {
       _context = context;
+      _mapperConfiguration = new MapperConfiguration(cfg =>
+      {
+        cfg
+          .CreateProjection<Recipe, RecipeDTO>()
+          .ForMember(
+            dest => dest.ImageIds,
+            opt => opt.MapFrom(src => src.Images.Select(i => i.Id).ToList()));
+      });
     }
+
 
     /// <summary>
     /// Retrieves a recipe by its ID.
@@ -36,8 +50,9 @@ namespace server.Controllers
     [Route("{id:int}")]
     public async Task<IActionResult> GetRecipe(int id)
     {
-      // TODO(StevieShibly8): Replace with stored-procedure
-      var recipe = await _context.Recipe.FirstOrDefaultAsync(r => r.Id == id);
+      var recipe = await _context.Recipe
+        .ProjectTo<RecipeDTO>(_mapperConfiguration)
+        .FirstOrDefaultAsync(r => r.Id == id);
 
       if (recipe == null)
       {
@@ -78,9 +93,24 @@ namespace server.Controllers
     {
       var recipes = await _context.Recipe
         .Where(r => r.Name.ToLower().Contains((searchModel.SearchQuery ?? "").ToLower()))
+        .ProjectTo<RecipeDTO>(_mapperConfiguration)
         .ToListAsync();
 
       return Ok(recipes);
+    }
+
+    [HttpGet]
+    [Route("image/{id:int}")]
+    public async Task<IActionResult> GetRecipeImage(int id)
+    {
+      var recipeImage = await _context.RecipeImage.FirstOrDefaultAsync(i => i.Id == id);
+
+      if (recipeImage == null)
+      {
+        return NotFound();
+      }
+
+      return File(recipeImage.ImageData, "image/jpeg");
     }
   }
 }
