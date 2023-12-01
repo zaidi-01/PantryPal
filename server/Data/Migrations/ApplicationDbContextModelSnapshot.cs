@@ -235,12 +235,10 @@ namespace server.Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("longtext");
@@ -277,12 +275,10 @@ namespace server.Data.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Value")
                         .HasColumnType("longtext");
@@ -384,7 +380,8 @@ namespace server.Data.Migrations
                         .HasColumnType("smallint");
 
                     b.Property<string>("Categories")
-                        .HasColumnType("tinytext");
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("CookTime")
                         .HasColumnType("tinytext");
@@ -400,13 +397,11 @@ namespace server.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("DietaryRestrictions")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Directions")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Image")
                         .HasColumnType("text");
 
                     b.Property<string>("Ingredients")
@@ -437,6 +432,26 @@ namespace server.Data.Migrations
 
                             t.HasCheckConstraint("CK_Recipe_DateUpdated", "DateUpdated >= DateCreated");
                         });
+                });
+
+            modelBuilder.Entity("server.Models.RecipeImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("mediumblob");
+
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipeId");
+
+                    b.ToTable("RecipeImage");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -488,6 +503,22 @@ namespace server.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("server.Models.RecipeImage", b =>
+                {
+                    b.HasOne("server.Models.Recipe", "Recipe")
+                        .WithMany("Images")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recipe");
+                });
+
+            modelBuilder.Entity("server.Models.Recipe", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

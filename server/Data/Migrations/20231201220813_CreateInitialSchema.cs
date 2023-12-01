@@ -140,17 +140,16 @@ namespace server.Data.Migrations
                     Description = table.Column<string>(type: "text", nullable: false),
                     Ingredients = table.Column<string>(type: "text", nullable: false),
                     Directions = table.Column<string>(type: "text", nullable: false),
-                    Image = table.Column<string>(type: "text", nullable: true),
                     DateCreated = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     DateUpdated = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Categories = table.Column<string>(type: "tinytext", nullable: true),
                     CookTime = table.Column<string>(type: "tinytext", nullable: true),
                     PrepTime = table.Column<string>(type: "tinytext", nullable: true),
                     TotalTime = table.Column<string>(type: "tinytext", nullable: true),
                     Yield = table.Column<string>(type: "tinytext", nullable: true),
                     Servings = table.Column<string>(type: "tinytext", nullable: true),
                     Calories = table.Column<short>(type: "smallint", nullable: true),
-                    DietaryRestrictions = table.Column<string>(type: "text", nullable: true)
+                    Categories = table.Column<string>(type: "text", nullable: false),
+                    DietaryRestrictions = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -208,8 +207,8 @@ namespace server.Data.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "varchar(255)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "varchar(255)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "longtext", nullable: true),
                     UserId = table.Column<string>(type: "varchar(255)", nullable: false)
                 },
@@ -255,8 +254,8 @@ namespace server.Data.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "varchar(255)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "varchar(255)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(255)", nullable: false),
                     Value = table.Column<string>(type: "longtext", nullable: true)
                 },
                 constraints: table =>
@@ -266,6 +265,27 @@ namespace server.Data.Migrations
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "RecipeImage",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    ImageData = table.Column<byte[]>(type: "mediumblob", nullable: false),
+                    RecipeId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeImage", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RecipeImage_Recipe_RecipeId",
+                        column: x => x.RecipeId,
+                        principalTable: "Recipe",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -349,6 +369,11 @@ namespace server.Data.Migrations
                 name: "IX_PersistedGrants_SubjectId_SessionId_Type",
                 table: "PersistedGrants",
                 columns: new[] { "SubjectId", "SessionId", "Type" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecipeImage_RecipeId",
+                table: "RecipeImage",
+                column: "RecipeId");
         }
 
         /// <inheritdoc />
@@ -382,13 +407,16 @@ namespace server.Data.Migrations
                 name: "PersistedGrants");
 
             migrationBuilder.DropTable(
-                name: "Recipe");
+                name: "RecipeImage");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Recipe");
         }
     }
 }

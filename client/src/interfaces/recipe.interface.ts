@@ -1,3 +1,5 @@
+import { DietaryRestriction, RecipeCategory } from "@enums";
+
 /**
  * Represents a recipe.
  */
@@ -16,10 +18,8 @@ export interface Recipe {
   dateCreated: Date;
   /** The date the recipe was last updated. */
   dateUpdated: Date;
-  /** The image URL of the recipe. */
-  image?: string;
-  /** The categories of the recipe (comma-separated). */
-  categories?: string;
+  /** The image IDs of the recipe. */
+  imageIds: number[];
   /** The cook time of the recipe. */
   cookTime?: string;
   /** The prep time of the recipe. */
@@ -32,6 +32,8 @@ export interface Recipe {
   servings?: string;
   /** The calories of the recipe. */
   calories?: number;
-  /** The dietary restrictions of the recipe (comma-separated). */
-  dietaryRestrictions?: string;
+  /** The categories of the recipe. */
+  categories: RecipeCategory[];
+  /** The dietary restrictions of the recipe. */
+  dietaryRestrictions?: DietaryRestriction[];
 }
