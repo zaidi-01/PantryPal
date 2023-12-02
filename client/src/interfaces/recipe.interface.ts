@@ -20,6 +20,8 @@ export interface Recipe {
   dateUpdated: Date;
   /** The image IDs of the recipe. */
   imageIds: number[];
+  /** The image URLs of the recipe. */
+  imageUrls: string[];
   /** The cook time of the recipe. */
   cookTime?: string;
   /** The prep time of the recipe. */
