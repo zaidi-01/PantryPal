@@ -6,11 +6,6 @@ namespace server.Enums
   public enum RecipeCategory
   {
     /// <summary>
-    /// No category.
-    /// </summary>
-    None,
-
-    /// <summary>
     /// Appetizer.
     /// </summary>
     Appetizer,

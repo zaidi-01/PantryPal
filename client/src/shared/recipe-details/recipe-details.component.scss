@@ -1,14 +1,26 @@
+@use 'utilities';
+
 :host {
   display: block;
 }
 
-.recipe-details {
-  padding: 20px;
+.recipe-img {
+  aspect-ratio: 2;
 }
 
-.recipe-name {
-  box-shadow: 0 2px 4px rgba(82, 3, 3, 0.675);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.recipe-img img {
+  min-width: 100%;
+  min-height: 100%;
+
+  object-fit: cover;
+}
+
+.d-contents {
+  display: contents;
+}
+
+@include utilities.media-breakpoint-up(lg) {
+  .recipe-img {
+    aspect-ratio: 1;
+  }
 }
