@@ -1,7 +1,7 @@
 <div class="row h-100">
   <form
     class="col col-md-6 col-lg-4 m-auto"
-    [formGroup]="deleteRecipeForm"
+    [formGroup]="recipeIdForm"
     (ngSubmit)="onSubmitInternal()"
   >
     <div>
@@ -17,6 +17,9 @@
       </span>
       <span *ngIf="recipeIdControl.errors?.pattern" class="invalid-feedback">
         Recipe ID must be a number
+      </span>
+      <span *ngIf="recipeIdControl.errors?.min" class="invalid-feedback">
+        Recipe ID cannot be less than 1
       </span>
     </div>
   </form>
