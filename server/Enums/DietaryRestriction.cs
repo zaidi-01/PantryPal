@@ -6,11 +6,6 @@ namespace server.Enums
   public enum DietaryRestriction
   {
     /// <summary>
-    /// No dietary restriction.
-    /// </summary>
-    None,
-
-    /// <summary>
     /// Vegan.
     /// </summary>
     Vegan,
