@@ -20,3 +20,21 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+/* Icon sizes */
+[class*='icon-'] {
+  width: auto !important;
+  height: auto !important;
+}
+
+.icon-md {
+  font-size: 2em;
+}
+
+.icon-lg {
+  font-size: 4em;
+}
+
+.icon-xl {
+  font-size: 6em;
+}
