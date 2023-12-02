@@ -3,7 +3,7 @@ import { CommonModule, NgFor, NgIf, UpperCasePipe } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { BrowserModule } from '@angular/platform-browser';
 import { ROUTES, RouterModule, Routes } from '@angular/router';
 import { AdminModule } from 'src/admin/admin.module';
@@ -81,4 +81,8 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(matIconRegistry: MatIconRegistry) {
+    matIconRegistry.setDefaultFontSetClass('material-symbols-outlined');
+  }
+}
