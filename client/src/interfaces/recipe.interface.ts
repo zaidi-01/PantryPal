@@ -37,5 +37,5 @@ export interface Recipe {
   /** The categories of the recipe. */
   categories: RecipeCategory[];
   /** The dietary restrictions of the recipe. */
-  dietaryRestrictions?: DietaryRestriction[];
+  dietaryRestrictions: DietaryRestriction[];
 }
