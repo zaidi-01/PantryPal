@@ -13,25 +13,27 @@ export class RecipeIdInputComponent {
   recipeIdControlName = 'recipeId';
   recipeIdControl = new FormControl('', [
     Validators.required,
-    Validators.pattern(/^[0-9]+$/),
+    Validators.pattern(/^-?[0-9]+$/),
+    Validators.min(1),
   ]);
 
-  deleteRecipeForm: FormGroup = new FormGroup({
+  recipeIdForm: FormGroup = new FormGroup({
     [this.recipeIdControlName]: this.recipeIdControl,
   });
 
   constructor() {}
 
   onSubmitInternal() {
-    if (this.deleteRecipeForm.invalid) {
+    this.recipeIdControl.markAsTouched();
+
+    if (this.recipeIdForm.invalid) {
       return;
     }
-
-    this.deleteRecipeForm.disable();
+    this.recipeIdForm.disable();
     this.onSubmit(this.recipeIdControl.value ?? '')
       .pipe(
-        tap(() => this.deleteRecipeForm.reset()),
-        finalize(() => this.deleteRecipeForm.enable())
+        tap(() => this.recipeIdForm.reset()),
+        finalize(() => this.recipeIdForm.enable())
       )
       .subscribe();
   }
