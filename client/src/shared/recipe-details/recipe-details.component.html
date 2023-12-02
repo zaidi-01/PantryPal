@@ -1,89 +1,89 @@
-<div class="recipe-details" *ngIf="recipe">
-  <div class="recipe-name">
-    <h1>{{ recipe.name }}</h1>
+<div class="row mb-3">
+  <div class="recipe-img col- col-lg-4 mb-3 mb-lg-0">
+    <div
+      class="w-100 h-100 d-flex align-items-center justify-content-center overflow-hidden rounded-3"
+    >
+      <img [src]="recipe.imageUrls[0]" alt="Recipe Image" />
+    </div>
   </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Description:</strong></div>
-    <div class="attribute-value">{{ recipe.description }}</div>
+  <div class="col- col-lg-8 d-flex flex-column">
+    <div class="row">
+      <div class="col">
+        <h1>{{ recipe.name }}</h1>
+        <p>{{ recipe.description }}</p>
+      </div>
+    </div>
+    <div class="row flex-grow-1">
+      <div class="col-auto d-flex flex-md-column flex-wrap gap-2 mt-auto">
+        <div class="d-contents d-md-flex gap-2">
+          <app-recipe-attribute
+            *ngIf="recipe.prepTime"
+            class="recipe-attr"
+            icon="timer"
+            text="Prep Time: {{ recipe.prepTime }}"
+          ></app-recipe-attribute>
+          <app-recipe-attribute
+            *ngIf="recipe.cookTime"
+            class="recipe-attr"
+            icon="timer"
+            text="Cook Time: {{ recipe.cookTime }}"
+          ></app-recipe-attribute>
+          <app-recipe-attribute
+            *ngIf="recipe.totalTime"
+            class="recipe-attr"
+            icon="timer"
+            text="Total Time: {{ recipe.totalTime }}"
+          ></app-recipe-attribute>
+        </div>
+        <div class="d-contents d-md-flex gap-2">
+          <app-recipe-attribute
+            *ngIf="recipe.servings"
+            class="recipe-attr"
+            icon="people"
+            text="Servings: {{ recipe.servings }}"
+          ></app-recipe-attribute>
+          <app-recipe-attribute
+            *ngIf="recipe.calories"
+            class="recipe-attr"
+            icon="local_fire_department"
+            text="Calories: {{ recipe.calories }}"
+          ></app-recipe-attribute>
+        </div>
+        <div
+          *ngIf="recipe.categories.length"
+          class="d-contents d-md-flex gap-2"
+        >
+          <app-recipe-attribute
+            *ngFor="let category of recipe.categories"
+            class="recipe-attr"
+            icon="menu_book"
+            [text]="getCategoryName(category)"
+          ></app-recipe-attribute>
+        </div>
+        <div
+          *ngIf="recipe.dietaryRestrictions.length"
+          class="col-auto d-contents d-md-flex gap-2"
+        >
+          <app-recipe-attribute
+            *ngFor="let restriction of recipe.dietaryRestrictions"
+            class="recipe-attr"
+            icon="nutrition"
+            [text]="getDietaryRestrictionName(restriction)"
+          ></app-recipe-attribute>
+        </div>
+      </div>
+    </div>
   </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Ingredients:</strong></div>
-    <div class="attribute-value">{{ recipe.ingredients }}</div>
+</div>
+<div class="row mb-3">
+  <div class="col-">
+    <h2>Ingredients</h2>
+    <p class="m-0">{{ recipe.ingredients }}</p>
   </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Directions:</strong></div>
-    <div class="attribute-value">{{ recipe.directions }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Date Created:</strong></div>
-    <div class="attribute-value">{{ recipe.dateCreated }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Date Updated:</strong></div>
-    <div class="attribute-value">{{ recipe.dateUpdated }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Image IDs:</strong></div>
-    <div class="attribute-value">{{ recipe.imageIds }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Categories:</strong></div>
-    <div class="attribute-value">{{ recipe.categories }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Cook Time:</strong></div>
-    <div class="attribute-value">{{ recipe.cookTime }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Prep Time:</strong></div>
-    <div class="attribute-value">{{ recipe.prepTime }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Total Time:</strong></div>
-    <div class="attribute-value">{{ recipe.totalTime }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Yield:</strong></div>
-    <div class="attribute-value">{{ recipe.yield }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Servings:</strong></div>
-    <div class="attribute-value">{{ recipe.servings }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Calories:</strong></div>
-    <div class="attribute-value">{{ recipe.calories }}</div>
-  </div>
-  <br />
-
-  <div class="recipe-attribute">
-    <div class="attribute-label"><strong>Dietary Restrictions:</strong></div>
-    <div class="attribute-value">{{ recipe.dietaryRestrictions }}</div>
+</div>
+<div class="row">
+  <div class="col-">
+    <h2>Instructions</h2>
+    <p class="m-0">{{ recipe.directions }}</p>
   </div>
 </div>
