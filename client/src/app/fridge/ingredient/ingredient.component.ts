@@ -8,6 +8,7 @@ import { Ingredient } from '@interfaces';
 })
 export class IngredientComponent {
   @Input() public isInFridge!: boolean;
+  @Input() public search!: string;
   @Input() public ingredient!: Ingredient;
 
   @Output() public addIngredient = new EventEmitter();
