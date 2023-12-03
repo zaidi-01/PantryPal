@@ -1,0 +1,21 @@
+<div class="modal-content container">
+  <mat-dialog-content class="mat-typography">
+    <h2 mat-dialog-title class="dialog-title">{{ data.title }}</h2>
+    <p class="dialog-message">{{ data.message }}</p>
+    <b> Deletion is irreversible and may cause unwanted behavior</b>
+  </mat-dialog-content>
+  <hr />
+  <mat-dialog-actions class="clearfix">
+    <button
+      mat-button
+      class="cancelbtn"
+      [mat-dialog-close]="false"
+      *ngIf="data.type === 'confirmation'"
+    >
+      {{ data.secondaryBtnText }}
+    </button>
+    <button mat-button class="deletebtn" [mat-dialog-close]="true">
+      {{ data.primaryBtnText }}
+    </button>
+  </mat-dialog-actions>
+</div>
