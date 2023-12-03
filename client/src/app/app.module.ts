@@ -3,6 +3,7 @@ import { CommonModule, NgFor, NgIf, UpperCasePipe } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { BrowserModule } from '@angular/platform-browser';
 import { ROUTES, RouterModule, Routes } from '@angular/router';
@@ -10,6 +11,7 @@ import { AdminModule } from 'src/admin/admin.module';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { anonymousGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
+import { DialogComponent } from 'src/services/dialog/dialog.component';
 import { SharedModule } from 'src/shared/shared.module';
 import { AlertComponent } from './alert/alert.component';
 import { AppComponent } from './app.component';
@@ -20,7 +22,6 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
 import { RecipeSearchComponent } from './recipe-search/recipe-search.component';
 import { RecipeComponent } from './recipe/recipe.component';
-
 const buildRoutes = (appPaths: ApplicationPaths): Routes => [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   {
@@ -53,6 +54,7 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
     RecipeSearchComponent,
     RecipeComponent,
     AlertComponent,
+    DialogComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -65,6 +67,7 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
     ScrollingModule,
     NgIf,
     NgFor,
+    MatDialogModule,
     UpperCasePipe,
     ApiAuthorizationModule,
     RouterModule.forRoot([]),

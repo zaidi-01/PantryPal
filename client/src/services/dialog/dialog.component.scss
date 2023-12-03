@@ -1,0 +1,74 @@
+button {
+  background-color: #04aa6d;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+
+button:hover {
+  opacity: 20;
+}
+
+.cancelbtn,
+.deletebtn {
+  float: left;
+  width: 50%;
+  padding: 14px 0;
+}
+
+.cancelbtn {
+  background-color: #ccc;
+  color: black;
+}
+
+.deletebtn {
+  background-color: #f44336;
+}
+
+.container {
+  text-align: center;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% 5%;
+  border: 1px solid #888;
+  width: 90%;
+}
+
+hr {
+  border: 1px solid #f1f1f1;
+  margin-bottom: 25px;
+}
+
+.close {
+  position: absolute;
+  right: 35px;
+  top: 15px;
+  font-size: 40px;
+  font-weight: bold;
+  color: #f1f1f1;
+}
+
+.close:hover,
+.close:focus {
+  color: #f44336;
+  cursor: pointer;
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+@media screen and (max-width: 300px) {
+  .cancelbtn,
+  .deletebtn {
+    width: 50%;
+  }
+}
