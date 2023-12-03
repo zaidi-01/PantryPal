@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { Ingredient } from '@interfaces';
-import { FridgeService, KEY_FRIDGE_INGREDIENTS } from '@services';
+import { AlertService, FridgeService, KEY_FRIDGE_INGREDIENTS } from '@services';
 import {
   BehaviorSubject,
   Observable,
+  catchError,
   combineLatest,
   map,
   of,
+  startWith,
   switchMap,
 } from 'rxjs';
 
@@ -27,11 +29,16 @@ export class FridgeComponent {
     return this.fridgeIngredients$.getValue();
   }
 
-  constructor(private fridgeService: FridgeService) {
+  constructor(fridgeService: FridgeService, alertService: AlertService) {
     this.search$ = new BehaviorSubject<string>('');
-    this.allIngredients$ = this.fridgeService.getAllIngredients();
+    this.allIngredients$ = fridgeService.getAllIngredients().pipe(
+      catchError(() => {
+        alertService.error('Failed to load ingredients');
+        return of([]);
+      })
+    );
     this.fridgeIngredients$ = new BehaviorSubject<Ingredient[]>(
-      this.fridgeService.getIngredients()
+      fridgeService.getIngredients()
     );
     this.filteredIngredients$ = combineLatest([
       this.allIngredients$,
@@ -53,7 +60,8 @@ export class FridgeComponent {
         return of(filteredIngredients).pipe(
           map((ingredients) => ingredients.sort(this.sortByFridge.bind(this)))
         );
-      })
+      }),
+      startWith([])
     );
   }
 
