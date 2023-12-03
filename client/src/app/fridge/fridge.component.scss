@@ -1,64 +1,6 @@
-.ingredient {    
-    border: 2px;
-    border-radius: 10px;
-    margin: 2.5%;
-    padding: 20px 10px 20px 10px;
-   }
+:host {
+  flex-grow: 1;
 
-.available-ingredient {
-    background-color: lightgray;
+  display: flex;
+  flex-direction: column;
 }
-
-.added-ingredient {
-    background-color: lightgreen;
-}
-
-.ingredient .text {
-    display: inline-block; 
-    width: 80%; 
-    overflow: hidden; 
-    white-space: nowrap; 
-    text-overflow: ellipsis;
-    font-size: large; 
-}
-
-.ingredient .add-button {
-    display: inline;
-    align-items: right;
-    border: 2px;
-    border-color: gray;
-    border-style: solid;
-    border-radius: 50%;
-    width:40px;
-    position: absolute;
-}
-
-.ingredient .delete-button {
-    display: inline;
-    align-items: right;
-    border: 2px;
-    border-color: green;
-    border-style: solid;
-    border-radius: 50%;
-    width:40px;
-    position: absolute;
-}
-
-
-.no-ingredient-text{
-    text-align: center;
-    font-size: larger;
-    color: darkgray;
-}
-
-
-.ingredient-viewport {
-    height: 500px;
-}
-
-::ng-deep{
-    .cdk-virtual-scroll-content-wrapper {
-      display: grid;
-      grid-template-columns: 25% 25% 25% 25%;
-    }
-  }

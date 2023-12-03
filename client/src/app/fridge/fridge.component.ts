@@ -1,67 +1,106 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Ingredient } from '@interfaces';
-import { FridgeService } from '@services';
+import { FridgeService, KEY_FRIDGE_INGREDIENTS } from '@services';
+import {
+  BehaviorSubject,
+  Observable,
+  combineLatest,
+  map,
+  of,
+  switchMap,
+} from 'rxjs';
 
 @Component({
   selector: 'app-fridge-component',
   templateUrl: './fridge.component.html',
-  styleUrls:['./fridge.component.scss'],
+  styleUrl: './fridge.component.scss',
 })
-export class FridgeComponent implements OnInit{
+export class FridgeComponent {
+  search = '';
 
-  
-  addedIngredients: Set<string> = this.fridgeService.getLocallyStoredIngredients();
-  availableIngredients: string[] = [];
-  apiIngredients: Ingredient[] = [];
+  search$: BehaviorSubject<string>;
+  allIngredients$: Observable<Ingredient[]>;
+  fridgeIngredients$: BehaviorSubject<Ingredient[]>;
+  filteredIngredients$: Observable<Ingredient[]>;
 
-  filteredItems: string[] = [];
-  searchText = '';
+  get fridgeIngredients(): Ingredient[] {
+    return this.fridgeIngredients$.getValue();
+  }
 
   constructor(private fridgeService: FridgeService) {
-    this.getIngredients();
-  }
-
-  ngOnInit(): void {
-    if (this.addedIngredients.has(""))
-    {
-      this.addedIngredients.clear()
-    };    
-  }
-
-  private getIngredients(): void {
-    this.fridgeService.getIngredientsData().subscribe(ingredients => {
-      this.apiIngredients = ingredients as Ingredient[]
-      this.availableIngredients = this.apiIngredients.map(ingredient => ingredient.name).sort();
-    },
-    (error) => console.error(error));
-  }
-
-  public addIngredient(ingredient: string): void {
-    this.addedIngredients.add(ingredient);
-    localStorage.setItem("userIngredients",Array.from(this.addedIngredients).toString());
-
-    this.sortFilteredIngredients();
-  }
-
-  public deleteIngredient(ingredient: string): void {
-    this.addedIngredients = new Set([...this.addedIngredients].filter(item => item !== ingredient));
-    localStorage.setItem("userIngredients",Array.from(this.addedIngredients).toString());
-
-    this.sortFilteredIngredients();
-  }
-
-  public filterIngredients() {
-    this.filteredItems = this.availableIngredients.filter(item =>
-      item.toLowerCase().startsWith(this.searchText.toLowerCase())
+    this.search$ = new BehaviorSubject<string>('');
+    this.allIngredients$ = this.fridgeService.getAllIngredients();
+    this.fridgeIngredients$ = new BehaviorSubject<Ingredient[]>(
+      this.fridgeService.getIngredients()
     );
-    this.sortFilteredIngredients();
+    this.filteredIngredients$ = combineLatest([
+      this.allIngredients$,
+      this.fridgeIngredients$,
+      this.search$,
+    ]).pipe(
+      switchMap(([allIngredients, fridgeIngredients, search]) => {
+        // Case 1: No search, return fridge ingredients sorted by name
+        if (!search) {
+          return of(fridgeIngredients).pipe(
+            map((ingredients) => ingredients.sort(this.sortByName))
+          );
+        }
+
+        // Case 2: Search, return all ingredients filtered by search and sorted by fridge
+        const filteredIngredients = allIngredients.filter((ingredient) =>
+          ingredient.name.toLowerCase().includes(search.toLowerCase())
+        );
+        return of(filteredIngredients).pipe(
+          map((ingredients) => ingredients.sort(this.sortByFridge.bind(this)))
+        );
+      })
+    );
   }
 
-  private sortFilteredIngredients()
-  {
-    const selectedIngredients = this.filteredItems.filter(item => this.addedIngredients.has(item)).sort();
-    const unselectedIngredients = this.filteredItems.filter(item => !Array.from(this.addedIngredients).includes(item)).sort();
+  isInFridge(ingredient: Ingredient): boolean {
+    return this.fridgeIngredients.some(
+      (fridgeIngredient) => fridgeIngredient.id === ingredient.id
+    );
+  }
 
-    this.filteredItems = selectedIngredients.concat(unselectedIngredients);
+  onSearchChange(value: string): void {
+    this.search$.next(value);
+  }
+
+  addIngredient(ingredient: Ingredient): void {
+    const ingredients = [...this.fridgeIngredients, ingredient];
+    this.fridgeIngredients$.next(ingredients);
+    this.saveIngredients(ingredients);
+  }
+
+  removeIngredient(ingredient: Ingredient): void {
+    const ingredients = this.fridgeIngredients.filter(
+      (fridgeIngredient) => fridgeIngredient.id !== ingredient.id
+    );
+    this.fridgeIngredients$.next(ingredients);
+    this.saveIngredients(ingredients);
+  }
+
+  saveIngredients(ingredients: Ingredient[]): void {
+    localStorage.setItem(KEY_FRIDGE_INGREDIENTS, JSON.stringify(ingredients));
+  }
+
+  sortByName(a: Ingredient, b: Ingredient): number {
+    return a.name.localeCompare(b.name);
+  }
+
+  sortByFridge(a: Ingredient, b: Ingredient): number {
+    const aInFridge = this.isInFridge(a);
+    const bInFridge = this.isInFridge(b);
+
+    if (aInFridge && !bInFridge) {
+      return -1;
+    }
+
+    if (!aInFridge && bInFridge) {
+      return 1;
+    }
+
+    return this.sortByName(a, b);
   }
 }

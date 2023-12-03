@@ -1,69 +1,39 @@
-<h1>Fridge</h1>
-<br />
-<br />
-<div class="form-outline">
-  <input
-    type="search"
-    id="form1"
-    class="form-control"
-    placeholder="Search Ingredient"
-    aria-label="Search"
-    [(ngModel)]="searchText"
-    (input)="filterIngredients()"
-  />
+<div class="row d-flex mb-3">
+  <div class="col- col-md-6 m-auto">
+    <div class="form-outline">
+      <input
+        type="search"
+        class="form-control rounded-pill"
+        placeholder="Search Ingredient"
+        [(ngModel)]="search"
+        (ngModelChange)="onSearchChange(search)"
+      />
+    </div>
+  </div>
 </div>
-<br />
-<br />
-<h2>Ingredients</h2>
 
-<ng-container>
-  <body
-    class="no-ingredient-text"
-    *ngIf="addedIngredients.size == 0 && !searchText"
+<ng-container *ngIf="filteredIngredients$ | async as ingredients">
+  <div
+    *ngIf="!ingredients.length"
+    class="col- h-75 d-flex flex-column justify-content-center align-items-center text-muted opacity-75 user-select-none"
   >
-    Use the search bar to find and add/remove ingredients
-  </body>
-</ng-container>
-
-<ng-container *ngIf="searchText">
-  <cdk-virtual-scroll-viewport class="ingredient-viewport" itemSize="25">
-    <div *cdkVirtualFor ="let ingredient of filteredItems">
-      <div
-        class="ingredient available-ingredient"
-        [class.added-ingredient]="addedIngredients.has(ingredient)"
-      >
-        <span class="text">{{ ingredient }}</span>
-        <button
-          class="btn"
-          [ngClass]="
-            addedIngredients.has(ingredient)
-              ? 'btn-success delete-button'
-              : 'btn-secondary add-button'
-          "
-          (click)="
-            addedIngredients.has(ingredient)
-              ? deleteIngredient(ingredient)
-              : addIngredient(ingredient)
-          "
-        >
-          {{ addedIngredients.has(ingredient) ? "-" : "+" }}
-        </button>
+    <h2 *ngIf="!search">
+      Use the search bar to find and add/remove ingredients
+    </h2>
+    <h2 *ngIf="!!search">No ingredients found</h2>
+  </div>
+  <div *ngIf="!!ingredients.length" class="row flex-grow-1 mb-3">
+    <cdk-virtual-scroll-viewport class="col" itemSize="25">
+      <div class="row px-2">
+        <app-ingredient
+          *cdkVirtualFor="let ingredient of ingredients"
+          class="col- col-md-4 col-lg-3 mb-3"
+          [ingredient]="ingredient"
+          [isInFridge]="isInFridge(ingredient)"
+          (addIngredient)="addIngredient(ingredient)"
+          (removeIngredient)="removeIngredient(ingredient)"
+        ></app-ingredient>
       </div>
-    </div>
-  </cdk-virtual-scroll-viewport>
-</ng-container>
-<ng-container *ngIf="!searchText"> 
-  <cdk-virtual-scroll-viewport class="ingredient-viewport" itemSize="25">
-    <div *cdkVirtualFor="let ingredient of addedIngredients">
-      <div class="ingredient added-ingredient">
-        <span class="text">{{ ingredient }}</span>
-        <button
-          class="btn btn-success delete-button"
-          (click)="deleteIngredient(ingredient)"
-        >
-          -
-        </button>
-      </div>
-    </div>
-  </cdk-virtual-scroll-viewport>
+    </cdk-virtual-scroll-viewport>
+  </div>
 </ng-container>
