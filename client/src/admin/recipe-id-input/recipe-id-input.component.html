@@ -8,9 +8,9 @@
       <input
         type="text"
         class="form-control"
-        [class.is-invalid]="recipeIdControl.touched && recipeIdControl.invalid"
         placeholder="Recipe ID"
-        [formControlName]="recipeIdControlName"
+        [formControl]="recipeIdControl"
+        [class.is-invalid]="recipeIdControl.touched && recipeIdControl.invalid"
       />
       <span *ngIf="recipeIdControl.errors?.required" class="invalid-feedback">
         Recipe ID is required

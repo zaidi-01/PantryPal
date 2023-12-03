@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { ApplicationPaths } from '../app.constants';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthorizeService } from 'src/api-authorization/authorize.service';
+import { ApplicationPaths } from '../app.constants';
 
 @Component({
   selector: 'app-nav-menu',
@@ -12,7 +13,11 @@ export class NavMenuComponent {
   isExpanded = false;
   isAuthenticated$: Observable<boolean>;
 
-  constructor(public appPaths: ApplicationPaths, authorizeService: AuthorizeService) {
+  constructor(
+    authorizeService: AuthorizeService,
+    public appPaths: ApplicationPaths,
+    private router: Router
+  ) {
     this.isAuthenticated$ = authorizeService.isAuthenticated();
   }
 
@@ -22,5 +27,9 @@ export class NavMenuComponent {
 
   toggle() {
     this.isExpanded = !this.isExpanded;
+  }
+
+  navigateToAdmin() {
+    this.router.navigate(['/', this.appPaths.admin]);
   }
 }

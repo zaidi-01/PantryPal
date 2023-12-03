@@ -10,7 +10,6 @@ import { NEVER, Observable, finalize, tap } from 'rxjs';
 export class RecipeIdInputComponent {
   @Input() onSubmit: (recipeId: string) => Observable<void> = () => NEVER;
 
-  recipeIdControlName = 'recipeId';
   recipeIdControl = new FormControl('', [
     Validators.required,
     Validators.pattern(/^-?[0-9]+$/),
@@ -18,7 +17,7 @@ export class RecipeIdInputComponent {
   ]);
 
   recipeIdForm: FormGroup = new FormGroup({
-    [this.recipeIdControlName]: this.recipeIdControl,
+    recipeId: this.recipeIdControl,
   });
 
   constructor() {}

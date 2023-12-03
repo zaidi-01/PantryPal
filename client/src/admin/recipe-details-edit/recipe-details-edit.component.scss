@@ -15,6 +15,14 @@
   object-fit: cover;
 }
 
+textarea {
+  resize: none;
+}
+
+.form-bar button {
+  min-width: 6em;
+}
+
 @include utilities.media-breakpoint-up(lg) {
   .recipe-img {
     aspect-ratio: 1;

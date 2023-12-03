@@ -19,7 +19,7 @@ export class RecipeDetailsComponent {
     return RecipeCategoryDisplayNames[category];
   }
 
-  getDietaryRestrictionName(restriction: DietaryRestriction): string {
+  getRestrictionName(restriction: DietaryRestriction): string {
     return DietaryRestrictionDisplayNames[restriction];
   }
 }
