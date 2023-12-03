@@ -1,5 +1,6 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
@@ -42,6 +43,7 @@ namespace server.Controllers
 
     [HttpPost]
     [Route("")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateRecipe([FromBody] RecipeCreateDTO recipeDTO)
     {
       var recipe = new Recipe
@@ -96,6 +98,7 @@ namespace server.Controllers
     /// <returns>An empty response if the recipe was deleted successfully, otherwise NotFound.</returns>
     [HttpDelete]
     [Route("{id:int}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteRecipe(int id)
     {
       // Delete recipe
@@ -111,6 +114,7 @@ namespace server.Controllers
 
     [HttpPost]
     [Route("{id:int}/image")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AddRecipeImage(int id, [FromForm] IFormFile image)
     {
       // TODO: Investigate why images are not being saved to the database
