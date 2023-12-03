@@ -3,7 +3,13 @@
     class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
   >
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">PantryPal</a>
+      <a
+        class="navbar-brand"
+        [routerLink]="['/']"
+        (dblclick)="navigateToAdmin()"
+      >
+        PantryPal
+      </a>
       <button
         class="navbar-toggler"
         type="button"
