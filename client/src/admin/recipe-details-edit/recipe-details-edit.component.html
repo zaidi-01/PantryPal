@@ -1,0 +1,237 @@
+<form [formGroup]="recipeForm" (ngSubmit)="onSubmitInternal()">
+  <div class="row mb-3">
+    <div class="recipe-img col- col-lg-4 mb-3 mb-lg-0">
+      <div
+        class="w-100 h-100 position-relative d-flex align-items-center justify-content-center overflow-hidden rounded-3 bg-light"
+      >
+        <div
+          class="w-100 h-100 position-absolute top-0 start-0 d-flex align-items-center justify-content-center text-muted opacity-75"
+        >
+          <mat-icon class="icon-xl m-auto">restaurant</mat-icon>
+        </div>
+        <img *ngIf="hasImage" class="z-1" [src]="imageUrl" alt="Recipe Image" />
+        <input
+          type="file"
+          role="button"
+          class="w-100 h-100 position-absolute top-0 start-0 z-2 opacity-0"
+          accept=".jpg,.jpeg,.png"
+          [formControl]="imageControl"
+          (change)="onImageChange($event)"
+          hidden
+        />
+        <button
+          mat-mini-fab
+          class="position-absolute bottom-0 end-0 z-2 p-2 m-2"
+          color="warn"
+          (click)="deleteImage()"
+          [disabled]="!hasImage"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="col- col-lg-8 d-flex flex-column">
+      <div class="row flex-grow-1 mb-3">
+        <div class="col d-flex flex-column">
+          <div class="mb-2">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Recipe Name"
+              maxlength="255"
+              [formControl]="nameControl"
+              [class.is-invalid]="nameControl.touched && nameControl.invalid"
+            />
+            <span *ngIf="nameControl.errors?.required" class="invalid-feedback">
+              Recipe name is required
+            </span>
+          </div>
+          <div>
+            <textarea
+              class="form-control flex-grow-1"
+              placeholder="Recipe Description"
+              maxlength="65533"
+              rows="10"
+              [formControl]="descriptionControl"
+              [class.is-invalid]="
+                descriptionControl.touched && descriptionControl.invalid
+              "
+            ></textarea>
+            <span
+              *ngIf="descriptionControl.errors?.required"
+              class="invalid-feedback"
+            >
+              Recipe description is required
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col d-flex flex-wrap gap-2">
+          <div
+            class="col d-contents d-md-flex flex-md-column justify-content-end gap-2"
+          >
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Prep Time"
+              maxlength="255"
+              [formControl]="prepTimeControl"
+            />
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Cook Time"
+              maxlength="255"
+              [formControl]="cookTimeControl"
+            />
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Total Time"
+              maxlength="255"
+              [formControl]="totalTimeControl"
+            />
+          </div>
+          <div
+            class="col d-contents d-md-flex flex-md-column justify-content-end gap-2"
+          >
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Servings"
+              maxlength="255"
+              [formControl]="servingsControl"
+            />
+            <div>
+              <input
+                type="number"
+                class="form-control"
+                placeholder="Calories"
+                min="0"
+                max="65535"
+                [formControl]="caloriesControl"
+                [class.is-invalid]="
+                  caloriesControl.touched && caloriesControl.invalid
+                "
+              />
+              <span
+                *ngIf="caloriesControl.errors?.pattern"
+                class="invalid-feedback"
+              >
+                Calories must be a number
+              </span>
+            </div>
+          </div>
+          <div
+            class="col d-contents d-md-flex flex-md-column justify-content-end gap-2"
+          >
+            <mat-select
+              class="form-control"
+              placeholder="Categories"
+              multiple
+              [formControl]="categoriesControl"
+            >
+              <mat-select-trigger>
+                {{ getCategoryName(categories[0]) || "" }}
+                <small
+                  *ngIf="categories.length > 1"
+                  class="text-muted opacity-75"
+                >
+                  (+{{ categories.length - 1 }} more)
+                </small>
+              </mat-select-trigger>
+              <mat-option
+                *ngFor="let category of categoryValues"
+                [value]="category"
+              >
+                {{ getCategoryName(category) }}
+              </mat-option>
+            </mat-select>
+          </div>
+          <div
+            class="col d-contents d-md-flex flex-md-column justify-content-end gap-2"
+          >
+            <mat-select
+              class="form-control"
+              placeholder="Dietary Restrictions"
+              multiple
+              [formControl]="restrictionsControl"
+            >
+              <mat-select-trigger>
+                {{ getRestrictionName(restrictions[0]) || "" }}
+                <small
+                  *ngIf="restrictions.length > 1"
+                  class="text-muted opacity-75"
+                >
+                  (+{{ restrictions.length - 1 }} more)
+                </small>
+              </mat-select-trigger>
+              <mat-option
+                *ngFor="let restriction of restrictionValues"
+                [value]="restriction"
+              >
+                {{ getRestrictionName(restriction) }}
+              </mat-option>
+            </mat-select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-">
+      <h2>Ingredients</h2>
+      <textarea
+        class="form-control"
+        placeholder="Ingredients"
+        rows="10"
+        maxlength="65533"
+        [formControl]="ingredientsControl"
+        [class.is-invalid]="
+          ingredientsControl.touched && ingredientsControl.invalid
+        "
+      ></textarea>
+      <span
+        *ngIf="ingredientsControl.errors?.required"
+        class="invalid-feedback"
+      >
+        Recipe ingredients are required
+      </span>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-">
+      <h2>Directions</h2>
+      <textarea
+        class="form-control"
+        placeholder="Directions"
+        rows="10"
+        maxlength="65533"
+        [formControl]="directionsControl"
+        [class.is-invalid]="
+          directionsControl.touched && directionsControl.invalid
+        "
+      ></textarea>
+      <span *ngIf="directionsControl.errors?.required" class="invalid-feedback">
+        Recipe directions are required
+      </span>
+    </div>
+  </div>
+
+  <div
+    class="form-bar position-sticky bottom-0 start-0 w-100 p-2 gap-2 bg-white border-top z-2"
+  >
+    <div class="col d-flex justify-content-end gap-2">
+      <button
+        class="btn btn-outline-danger"
+        [routerLink]="['/', appPaths.admin]"
+      >
+        Discard
+      </button>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+  </div>
+</form>
