@@ -36,10 +36,37 @@ namespace server.Controllers
           .CreateProjection<Recipe, RecipeDTO>()
           .ForMember(
             dest => dest.ImageIds,
-            opt => opt.MapFrom(src => src.Images.Select(i => i.Id).ToList()));
+            opt => opt.MapFrom(src => src.Images != null ? src.Images.Select(i => i.Id) : new int[0]));
       });
     }
 
+    [HttpPost]
+    [Route("")]
+    public async Task<IActionResult> CreateRecipe([FromBody] RecipeCreateDTO recipeDTO)
+    {
+      var recipe = new Recipe
+      {
+        Name = recipeDTO.Name,
+        Description = recipeDTO.Description,
+        Ingredients = recipeDTO.Ingredients,
+        Directions = recipeDTO.Directions,
+        CookTime = recipeDTO.CookTime,
+        PrepTime = recipeDTO.PrepTime,
+        TotalTime = recipeDTO.TotalTime,
+        Yield = recipeDTO.Yield,
+        Servings = recipeDTO.Servings,
+        Calories = recipeDTO.Calories,
+        Categories = recipeDTO.Categories,
+        DietaryRestrictions = recipeDTO.DietaryRestrictions,
+        DateCreated = DateTime.UtcNow,
+        DateUpdated = DateTime.UtcNow,
+      };
+
+      await _context.Recipe.AddAsync(recipe);
+      await _context.SaveChangesAsync();
+
+      return Ok(recipe.Id);
+    }
 
     /// <summary>
     /// Retrieves a recipe by its ID.
@@ -80,6 +107,34 @@ namespace server.Controllers
       }
 
       return Ok();
+    }
+
+    [HttpPost]
+    [Route("{id:int}/image")]
+    public async Task<IActionResult> AddRecipeImage(int id, [FromForm] IFormFile image)
+    {
+      // TODO: Investigate why images are not being saved to the database
+      var recipe = await _context.Recipe.FirstOrDefaultAsync(r => r.Id == id);
+
+      if (recipe == null)
+      {
+        return NotFound();
+      }
+
+      using var memoryStream = new MemoryStream();
+      await image.CopyToAsync(memoryStream);
+
+      if (memoryStream.Length > 1048576)
+      {
+        return BadRequest("Image must be less than 1MB.");
+      }
+
+      var recipeImage = new RecipeImage { ImageData = memoryStream.ToArray() };
+
+      await _context.RecipeImage.AddAsync(recipeImage);
+      await _context.SaveChangesAsync();
+
+      return Ok(recipeImage.Id);
     }
 
     /// <summary>

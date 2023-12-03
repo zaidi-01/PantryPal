@@ -13,7 +13,7 @@ namespace server.Models
     /// </summary>
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public required int Id { get; set; }
+    public int Id { get; set; }
 
     /// <summary>
     /// The image data.
@@ -25,7 +25,7 @@ namespace server.Models
     /// The ID of the recipe this image belongs to.
     /// </summary>
     [ForeignKey("Recipe")]
-    public required int RecipeId { get; set; }
-    public required Recipe Recipe { get; set; }
+    public int RecipeId { get; set; }
+    public Recipe? Recipe { get; set; }
   }
 }
