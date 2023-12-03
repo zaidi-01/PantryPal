@@ -9,7 +9,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ROUTES, RouterModule, Routes } from '@angular/router';
 import { AdminModule } from 'src/admin/admin.module';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
-import { anonymousGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { DialogComponent } from 'src/services/dialog/dialog.component';
 import { SharedModule } from 'src/shared/shared.module';
@@ -22,22 +21,20 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
 import { RecipeSearchComponent } from './recipe-search/recipe-search.component';
 import { RecipeComponent } from './recipe/recipe.component';
+
 const buildRoutes = (appPaths: ApplicationPaths): Routes => [
-  { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: '', pathMatch: 'full', redirectTo: appPaths.search },
   {
     path: appPaths.fridge,
     component: FridgeComponent,
-    canActivate: [anonymousGuard],
   },
   {
     path: appPaths.search,
     component: RecipeSearchComponent,
-    canActivate: [anonymousGuard],
   },
   {
     path: `${appPaths.recipe}/:id`,
     component: RecipeComponent,
-    canActivate: [anonymousGuard],
   },
   {
     path: '**',
@@ -55,6 +52,7 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
     RecipeComponent,
     AlertComponent,
     DialogComponent,
+    HomeComponent, //TODO: remove in the future if not needed
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
