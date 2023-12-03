@@ -15,10 +15,6 @@
   object-fit: cover;
 }
 
-.d-contents {
-  display: contents;
-}
-
 @include utilities.media-breakpoint-up(lg) {
   .recipe-img {
     aspect-ratio: 1;
