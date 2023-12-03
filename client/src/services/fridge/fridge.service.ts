@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Ingredient } from '@interfaces';
-import { Observable } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { HttpClientService } from './../http-client/http-client.service';
 
 /**
@@ -10,7 +10,7 @@ import { HttpClientService } from './../http-client/http-client.service';
   providedIn: 'root',
 })
 export class FridgeService {
-  public apiIngredientsList: Ingredient[] = [];
+  private allIngredients!: Ingredient[];
 
   constructor(private httpClientService: HttpClientService) {}
 
@@ -18,8 +18,13 @@ export class FridgeService {
    * Retrieves the list of ingredients from the API.
    * @returns An Observable that emits an array of Ingredient objects.
    */
-  getIngredientsData(): Observable<Ingredient[]> {
-    return this.httpClientService.get<Ingredient[]>('fridge');
+    if (this.allIngredients) {
+      return of(this.allIngredients);
+    }
+
+    return this.httpClientService
+      .get<Ingredient[]>('fridge')
+      .pipe(tap((ingredients) => (this.allIngredients = ingredients)));
   }
 
   /**
