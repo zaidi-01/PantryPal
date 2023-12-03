@@ -37,7 +37,7 @@ namespace server.Controllers
           .CreateProjection<Recipe, RecipeDTO>()
           .ForMember(
             dest => dest.ImageIds,
-            opt => opt.MapFrom(src => src.Images != null ? src.Images.Select(i => i.Id) : new int[0]));
+            opt => opt.MapFrom(src => src.Images.Select(i => i.Id)));
       });
     }
 
