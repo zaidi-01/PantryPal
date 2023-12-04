@@ -1,0 +1,2 @@
+<app-recipe-id-input *ngIf="!recipe" [onSubmit]="getRecipe"></app-recipe-id-input>
+<app-recipe-details-edit *ngIf="recipe" [recipe]="recipe" [onSubmit]="editRecipe"></app-recipe-details-edit>

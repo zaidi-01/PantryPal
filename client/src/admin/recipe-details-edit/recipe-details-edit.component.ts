@@ -16,11 +16,32 @@ import { ApplicationPaths } from 'src/app/app.constants';
   styleUrl: './recipe-details-edit.component.scss',
 })
 export class RecipeDetailsEditComponent {
-  @Input() public recipe!: Recipe;
+  private _recipe!: Recipe;
+
   @Input() public onSubmit: (
     recipe: Recipe,
     newImages: File[]
   ) => Observable<any> = () => NEVER;
+
+  @Input() public set recipe(recipe: Recipe) {
+    this._recipe = recipe;
+
+    this.nameControl.setValue(recipe.name);
+    this.descriptionControl.setValue(recipe.description);
+    this.prepTimeControl.setValue(recipe.prepTime ?? '');
+    this.cookTimeControl.setValue(recipe.cookTime ?? '');
+    this.totalTimeControl.setValue(recipe.totalTime ?? '');
+    this.servingsControl.setValue(recipe.servings ?? '');
+    this.caloriesControl.setValue(recipe.calories);
+    this.categoriesControl.setValue(recipe.categories ?? []);
+    this.restrictionsControl.setValue(recipe.dietaryRestrictions ?? []);
+    this.ingredientsControl.setValue(recipe.ingredients);
+    this.directionsControl.setValue(recipe.directions);
+  }
+
+  public get recipe(): Recipe {
+    return this._recipe;
+  }
 
   categoryValues = Object.values(RecipeCategory)
     .filter((category) => typeof category === 'number')
@@ -30,38 +51,38 @@ export class RecipeDetailsEditComponent {
     .map((restriction) => restriction as DietaryRestriction);
 
   imageControl = new FormControl('');
-  nameControl = new FormControl(this.recipe?.name ?? '', [
+  nameControl = new FormControl('', [
     Validators.required,
     Validators.maxLength(255),
   ]);
-  descriptionControl = new FormControl(this.recipe?.description ?? '', [
+  descriptionControl = new FormControl('', [
     Validators.required,
     Validators.maxLength(65533),
   ]);
-  prepTimeControl = new FormControl(this.recipe?.prepTime ?? undefined, [
+  prepTimeControl = new FormControl('', [
     Validators.maxLength(255),
   ]);
-  cookTimeControl = new FormControl(this.recipe?.cookTime ?? undefined, [
+  cookTimeControl = new FormControl('', [
     Validators.maxLength(255),
   ]);
-  totalTimeControl = new FormControl(this.recipe?.totalTime ?? undefined, [
+  totalTimeControl = new FormControl('', [
     Validators.maxLength(255),
   ]);
-  servingsControl = new FormControl(this.recipe?.servings ?? undefined, [
+  servingsControl = new FormControl('', [
     Validators.maxLength(255),
   ]);
-  caloriesControl = new FormControl(this.recipe?.calories ?? undefined, [
+  caloriesControl = new FormControl<number | undefined>(undefined, [
     Validators.min(0),
     Validators.max(65535),
     Validators.pattern('^[0-9]*$'),
   ]);
-  categoriesControl = new FormControl(this.recipe?.categories ?? []);
-  restrictionsControl = new FormControl(this.recipe?.dietaryRestrictions ?? []);
-  ingredientsControl = new FormControl(this.recipe?.ingredients ?? '', [
+  categoriesControl = new FormControl([] as RecipeCategory[]);
+  restrictionsControl = new FormControl([] as DietaryRestriction[]);
+  ingredientsControl = new FormControl('', [
     Validators.required,
     Validators.maxLength(65533),
   ]);
-  directionsControl = new FormControl(this.recipe?.directions ?? '', [
+  directionsControl = new FormControl('', [
     Validators.required,
     Validators.maxLength(65533),
   ]);
@@ -153,16 +174,13 @@ export class RecipeDetailsEditComponent {
       cookTime: this.cookTimeControl.value ?? undefined,
       totalTime: this.totalTimeControl.value ?? undefined,
       servings: this.servingsControl.value ?? undefined,
-      calories: this.caloriesControl.value
-        ? +this.caloriesControl.value
-        : undefined,
+      calories: this.caloriesControl.value!,
       categories: this.categoriesControl.value ?? [],
       dietaryRestrictions: this.restrictionsControl.value ?? [],
       ingredients: this.ingredientsControl.value ?? '',
       directions: this.directionsControl.value ?? '',
     };
 
-    console.log(this.newImages);
     this.onSubmit(newRecipe, this.newImages)
       .pipe(
         tap(() => {

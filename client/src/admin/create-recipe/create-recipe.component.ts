@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Recipe } from '@interfaces';
 import { AlertService, RecipeService } from '@services';
-import { Observable, catchError, map, of, switchMap, tap } from 'rxjs';
+import { Observable, catchError, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-create-recipe',
@@ -9,30 +9,27 @@ import { Observable, catchError, map, of, switchMap, tap } from 'rxjs';
   styleUrl: './create-recipe.component.scss',
 })
 export class CreateRecipeComponent {
-  public createRecipe: (recipe: Recipe, images: File[]) => Observable<void>;
+  public createRecipe: (recipe: Recipe, images: File[]) => Observable<any>;
 
-  constructor(
-    private recipeService: RecipeService,
-    private alertService: AlertService
-  ) {
+  constructor(recipeService: RecipeService, alertService: AlertService) {
     this.createRecipe = (recipe, images) =>
-      this.recipeService.createRecipe(recipe).pipe(
-        tap((recipeId) =>
-          this.alertService.success(`Recipe #${recipeId} created`)
-        ),
+      recipeService.createRecipe(recipe).pipe(
+        tap((recipeId) => alertService.success(`Recipe #${recipeId} created`)),
         catchError((err) => {
           alertService.error(`Failed to create recipe`);
           throw err;
         }),
-        switchMap((recipeId) =>
-          this.recipeService.uploadImages(recipeId, images).pipe(
+        switchMap((recipeId) => {
+          if (!images.length) {
+            return [null];
+          }
+          return recipeService.uploadImages(recipeId, images).pipe(
             catchError(() => {
               alertService.error(`Failed to upload images`);
               return [null];
             })
-          )
-        ),
-        map(() => {})
+          );
+        })
       );
   }
 }

@@ -8,7 +8,7 @@ import { NEVER, Observable, finalize, tap } from 'rxjs';
   styleUrl: './recipe-id-input.component.scss',
 })
 export class RecipeIdInputComponent {
-  @Input() onSubmit: (recipeId: string) => Observable<void> = () => NEVER;
+  @Input() onSubmit: (recipeId: string) => Observable<any> = () => NEVER;
 
   recipeIdControl = new FormControl('', [
     Validators.required,
