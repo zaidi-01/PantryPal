@@ -1,15 +1,11 @@
-using AutoMapper;
 using server.Enums;
-using server.Models;
-
 namespace server.DTOs
 {
   /// <summary>
   /// A new recipe.
   /// </summary>
-  public class RecipeCreateDTO
+  public class RecipeCreateOrUpdateDTO
   {
-
     /// <summary>
     /// The name of the recipe.
     /// </summary>

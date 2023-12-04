@@ -91,7 +91,7 @@ namespace server.Controllers
     [HttpPost]
     [Route("")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> CreateRecipe([FromBody] RecipeCreateDTO recipeDTO)
+    public async Task<IActionResult> CreateRecipe([FromBody] RecipeCreateOrUpdateDTO recipeDTO)
     {
       var recipe = new Recipe
       {
@@ -115,6 +115,37 @@ namespace server.Controllers
       await _context.SaveChangesAsync();
 
       return Ok(recipe.Id);
+    }
+
+    [HttpPut]
+    [Route("{id:int}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> UpdateRecipe(int id, [FromBody] RecipeCreateOrUpdateDTO recipeDTO)
+    {
+      var recipe = await _context.Recipe.FirstOrDefaultAsync(r => r.Id == id);
+
+      if (recipe == null)
+      {
+        return NotFound();
+      }
+
+      recipe.Name = recipeDTO.Name;
+      recipe.Description = recipeDTO.Description;
+      recipe.Ingredients = recipeDTO.Ingredients;
+      recipe.Directions = recipeDTO.Directions;
+      recipe.CookTime = recipeDTO.CookTime;
+      recipe.PrepTime = recipeDTO.PrepTime;
+      recipe.TotalTime = recipeDTO.TotalTime;
+      recipe.Yield = recipeDTO.Yield;
+      recipe.Servings = recipeDTO.Servings;
+      recipe.Calories = recipeDTO.Calories;
+      recipe.Categories = recipeDTO.Categories;
+      recipe.DietaryRestrictions = recipeDTO.DietaryRestrictions;
+      recipe.DateUpdated = DateTime.UtcNow;
+
+      await _context.SaveChangesAsync();
+
+      return Ok();
     }
 
     /// <summary>
@@ -148,7 +179,6 @@ namespace server.Controllers
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteRecipe(int id)
     {
-      // Delete recipe
       var result = await _context.Recipe.Where(r => r.Id == id).ExecuteDeleteAsync();
 
       if (result == 0)

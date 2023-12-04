@@ -18,7 +18,7 @@ interface SearchModel {
 /**
  * Represents a new recipe.
  */
-interface RecipeCreate {
+interface RecipeCreateOrUpdate {
   /** The name of the recipe. */
   name: string;
   /** The description of the recipe. */
@@ -93,8 +93,13 @@ export class RecipeService {
       );
   }
 
+  /**
+   * Creates a new recipe.
+   * @param recipe - The recipe to create.
+   * @returns An Observable that emits the ID of the created recipe.
+   */
   public createRecipe(recipe: Recipe): Observable<number> {
-    const recipeCreate: RecipeCreate = {
+    const recipeCreate: RecipeCreateOrUpdate = {
       name: recipe.name,
       description: recipe.description,
       ingredients: recipe.ingredients,
@@ -109,6 +114,29 @@ export class RecipeService {
       dietaryRestrictions: recipe.dietaryRestrictions,
     };
     return this.httpClientService.post<number>('recipe', recipeCreate);
+  }
+
+  /**
+   * Updates a recipe.
+   * @param recipe - The recipe to update.
+   * @returns An Observable that completes when the recipe is updated.
+   */
+  public updateRecipe(recipe: Recipe): Observable<void> {
+    const recipeUpdate: RecipeCreateOrUpdate = {
+      name: recipe.name,
+      description: recipe.description,
+      ingredients: recipe.ingredients,
+      directions: recipe.directions,
+      cookTime: recipe.cookTime,
+      prepTime: recipe.prepTime,
+      totalTime: recipe.totalTime,
+      yield: recipe.yield,
+      servings: recipe.servings,
+      calories: recipe.calories,
+      categories: recipe.categories,
+      dietaryRestrictions: recipe.dietaryRestrictions,
+    };
+    return this.httpClientService.put<void>(`recipe/${recipe.id}`, recipeUpdate);
   }
 
   /**

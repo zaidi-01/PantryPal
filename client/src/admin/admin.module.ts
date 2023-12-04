@@ -14,6 +14,7 @@ import { AdminSessionIndicatorComponent } from './admin-session-indicator/admin-
 import { AdminComponent } from './admin.component';
 import { CreateRecipeComponent } from './create-recipe/create-recipe.component';
 import { DeleteRecipeComponent } from './delete-recipe/delete-recipe.component';
+import { EditRecipeComponent } from './edit-recipe/edit-recipe.component';
 import { RecipeDetailsEditComponent } from './recipe-details-edit/recipe-details-edit.component';
 import { RecipeIdInputComponent } from './recipe-id-input/recipe-id-input.component';
 
@@ -32,6 +33,10 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
         component: CreateRecipeComponent,
       },
       {
+        path: appPaths.editRecipe,
+        component: EditRecipeComponent,
+      },
+      {
         path: appPaths.deleteRecipe,
         component: DeleteRecipeComponent,
       },
@@ -46,6 +51,7 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
     AdminSessionIndicatorComponent,
     RecipeIdInputComponent,
     CreateRecipeComponent,
+    EditRecipeComponent,
     DeleteRecipeComponent,
     RecipeDetailsEditComponent,
   ],
