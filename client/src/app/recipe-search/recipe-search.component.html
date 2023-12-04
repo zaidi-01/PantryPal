@@ -9,10 +9,13 @@
         placeholder="Search recipes"
         [(search)]="inputText"
       ></app-search-bar>
-      <app-filter-and-sort class="w-25" (sortByChange)="onSortByChange($event)">
-      </app-filter-and-sort>
       <button type="submit" class="btn btn-primary rounded-pill">Search</button>
     </form>
+    <app-filter-and-sort
+      (sortByChange)="onSortByChange($event)"
+      (filtersChange)="onFiltersChange($event)"
+    >
+    </app-filter-and-sort>
   </div>
 </div>
 

@@ -1,3 +1,52 @@
+<label class="text-nowrap">
+  <input
+    type="checkbox"
+    [(ngModel)]="filterByFridge"
+    (ngModelChange)="onChangeFridge()"
+  />
+  Include Fridge ingredients
+</label>
+
+<!-- TODO: Uncomment once Filter by Categories and Dietary Restrictions are implemented -->
+<!-- <mat-select
+  class="form-control"
+  placeholder="Filter Categories"
+  [(ngModel)]="selectedCategories"
+  multiple
+  (ngModelChange)="onChangeCategories()"
+>
+  <mat-select-trigger>
+    {{ getCategoryName(selectedCategories[0]) || "" }}
+    <small *ngIf="selectedCategories.length > 1" class="text-muted opacity-75">
+      (+{{ selectedCategories.length - 1 }} more)
+    </small>
+  </mat-select-trigger>
+  <mat-option *ngFor="let category of categories" [value]="category">
+    {{ getCategoryName(category) }}
+  </mat-option>
+</mat-select>
+
+<mat-select
+  class="form-control"
+  placeholder="Filter Dietary Restrictions"
+  [(ngModel)]="selectedRestrictions"
+  multiple
+  (ngModelChange)="onChangeRestrictions()"
+>
+  <mat-select-trigger>
+    {{ getRestrictionName(selectedRestrictions[0]) || "" }}
+    <small
+      *ngIf="selectedRestrictions.length > 1"
+      class="text-muted opacity-75"
+    >
+      (+{{ selectedRestrictions.length - 1 }} more)
+    </small>
+  </mat-select-trigger>
+  <mat-option *ngFor="let restriction of restrictions" [value]="restriction">
+    {{ getRestrictionName(restriction) }}
+  </mat-option>
+</mat-select> -->
+
 <mat-select
   class="form-control rounded-pill"
   placeholder="Sort By"
