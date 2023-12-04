@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
@@ -5,13 +6,33 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
 using server.DTOs;
+using server.Enums;
 using server.Models;
 
 namespace server.Controllers
 {
+
+  /// <summary>
+  /// A model for searching recipes.
+  /// </summary>
   public class SearchModel
   {
-    public string? SearchQuery { get; set; }
+    /// <summary>
+    /// The search query.
+    /// </summary>
+    public required string SearchQuery { get; set; }
+    /// <summary>
+    /// The number of recipes to skip.
+    /// </summary>
+    public required int Skip { get; set; }
+    /// <summary>
+    /// The number of recipes to take.
+    /// </summary>
+    public required int Take { get; set; }
+    /// <summary>
+    /// The field to sort by.
+    /// </summary>
+    public string? SortBy { get; set; }
   }
 
   /// </summary>
@@ -40,7 +61,11 @@ namespace server.Controllers
             opt => opt.MapFrom(src => src.Images.Select(i => i.Id)));
       });
     }
-
+    /// <summary>
+    /// Creates a new recipe.
+    /// </summary>
+    /// <param name="recipeDTO">The <see cref="RecipeCreateDTO"/> instance.</param>
+    /// <returns>The ID of the newly created recipe.</returns>
     [HttpPost]
     [Route("")]
     [Authorize(Roles = "Admin")]
@@ -58,8 +83,8 @@ namespace server.Controllers
         Yield = recipeDTO.Yield,
         Servings = recipeDTO.Servings,
         Calories = recipeDTO.Calories,
-        Categories = recipeDTO.Categories,
-        DietaryRestrictions = recipeDTO.DietaryRestrictions,
+        Categories = (List<RecipeCategory>)recipeDTO.Categories,
+        DietaryRestrictions = (List<DietaryRestriction>)recipeDTO.DietaryRestrictions,
         DateCreated = DateTime.UtcNow,
         DateUpdated = DateTime.UtcNow,
       };
@@ -112,52 +137,58 @@ namespace server.Controllers
       return Ok();
     }
 
-    [HttpPost]
-    [Route("{id:int}/image")]
-    [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> AddRecipeImage(int id, [FromForm] IFormFile image)
-    {
-      // TODO: Investigate why images are not being saved to the database
-      var recipe = await _context.Recipe.FirstOrDefaultAsync(r => r.Id == id);
-
-      if (recipe == null)
-      {
-        return NotFound();
-      }
-
-      using var memoryStream = new MemoryStream();
-      await image.CopyToAsync(memoryStream);
-
-      if (memoryStream.Length > 1048576)
-      {
-        return BadRequest("Image must be less than 1MB.");
-      }
-
-      var recipeImage = new RecipeImage { ImageData = memoryStream.ToArray() };
-
-      await _context.RecipeImage.AddAsync(recipeImage);
-      await _context.SaveChangesAsync();
-
-      return Ok(recipeImage.Id);
-    }
-
     /// <summary>
     /// Searches for recipes based on the specified search query.
     /// </summary>
-    /// <param name="searchModel">The search model containing the search query.</param>
+    /// <param name="searchModel">The <see cref="SearchModel"/> instance.</param>
     /// <returns>A list of recipes matching the search query.</returns>
     [HttpPost]
     [Route("search")]
     public async Task<IActionResult> SearchRecipes([FromBody] SearchModel searchModel)
     {
-      var recipes = await _context.Recipe
-        .Where(r => r.Name.ToLower().Contains((searchModel.SearchQuery ?? "").ToLower()))
-        .ProjectTo<RecipeDTO>(_mapperConfiguration)
-        .ToListAsync();
 
-      return Ok(recipes);
+      var searchQuery = searchModel.SearchQuery;
+      var skip = searchModel.Skip;
+      var take = searchModel.Take;
+      var sortBy = searchModel.SortBy;
+
+      var recipes = _context.Recipe
+        .Where(r => r.Name.ToLower().Contains(searchQuery.ToLower()));
+
+
+      if (sortBy != null)
+      {
+        switch (sortBy)
+        {
+          case "NameAsc":
+            recipes = recipes.OrderBy(r => r.Name);
+            break;
+          case "NameDesc":
+            recipes = recipes.OrderByDescending(r => r.Name);
+            break;
+          case "CaloriesAsc":
+            recipes = recipes.OrderBy(r => r.Calories);
+            break;
+          case "CaloriesDesc":
+            recipes = recipes.OrderByDescending(r => r.Calories);
+            break;
+          default:
+            break;
+        }
+      }
+
+      recipes = recipes.Skip(skip).Take(take);
+
+      var recipeDTOs = await recipes.ProjectTo<RecipeDTO>(_mapperConfiguration).ToListAsync();
+
+      return Ok(recipeDTOs);
     }
 
+    /// <summary>
+    /// Retrieves a recipe image by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the recipe image.</param>
+    /// <returns>The recipe image with the specified ID.</returns>
     [HttpGet]
     [Route("image/{id:int}")]
     public async Task<IActionResult> GetRecipeImage(int id)

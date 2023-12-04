@@ -17,6 +17,7 @@ import { SharedModule } from 'src/shared/shared.module';
 import { AlertComponent } from './alert/alert.component';
 import { AppComponent } from './app.component';
 import { ApplicationPaths } from './app.constants';
+import { FilterAndSortComponent } from './recipe-search/filter-and-sort/filter-and-sort.component';
 import { FridgeComponent } from './fridge/fridge.component';
 import { IngredientComponent } from './fridge/ingredient/ingredient.component';
 import { HomeComponent } from './home/home.component';
@@ -25,6 +26,7 @@ import { RecipeListComponent } from './recipe-list/recipe-list.component';
 import { RecipeSearchComponent } from './recipe-search/recipe-search.component';
 import { RecipeSummaryComponent } from './recipe-summary/recipe-summary.component';
 import { RecipeComponent } from './recipe/recipe.component';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
 
 const buildRoutes = (appPaths: ApplicationPaths): Routes => [
   { path: '', pathMatch: 'full', redirectTo: appPaths.search },
@@ -56,6 +58,7 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
     RecipeComponent,
     AlertComponent,
     DialogComponent,
+    FilterAndSortComponent,
     HomeComponent, //TODO: remove in the future if not needed
     IngredientComponent,
     RecipeSummaryComponent,
@@ -67,6 +70,7 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
     CommonModule,
     MatButtonModule,
     MatIconModule,
+    MatSelectModule,
     MatTooltipModule,
     AdminModule,
     SharedModule,
