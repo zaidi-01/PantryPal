@@ -3,6 +3,7 @@ import { CommonModule, NgFor, NgIf, UpperCasePipe } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { BrowserModule } from '@angular/platform-browser';
@@ -16,6 +17,7 @@ import { AlertComponent } from './alert/alert.component';
 import { AppComponent } from './app.component';
 import { ApplicationPaths } from './app.constants';
 import { FridgeComponent } from './fridge/fridge.component';
+import { IngredientComponent } from './fridge/ingredient/ingredient.component';
 import { HomeComponent } from './home/home.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
@@ -53,12 +55,14 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
     AlertComponent,
     DialogComponent,
     HomeComponent, //TODO: remove in the future if not needed
+    IngredientComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     CommonModule,
+    MatButtonModule,
     MatIconModule,
     AdminModule,
     SharedModule,

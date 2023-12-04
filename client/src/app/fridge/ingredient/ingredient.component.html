@@ -1,0 +1,14 @@
+<div class="card bg-light rounded-pill">
+  <div class="d-flex align-items-center justify-content-between p-3 gap-2">
+    <span
+      class="font-monospace text-truncate"
+      [innerHTML]="ingredient.name | highlight : search"
+    ></span>
+    <button *ngIf="!isInFridge" mat-mini-fab color="primary" (click)="onAdd()">
+      <mat-icon>add</mat-icon>
+    </button>
+    <button *ngIf="isInFridge" mat-mini-fab color="warn" (click)="onRemove()">
+      <mat-icon>remove</mat-icon>
+    </button>
+  </div>
+</div>
