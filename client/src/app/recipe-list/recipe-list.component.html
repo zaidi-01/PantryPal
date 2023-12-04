@@ -1,3 +1,5 @@
-<div *ngFor="let recipe of recipeList">
-  <a [routerLink]="['/', appPaths.recipe, recipe.id]">{{ recipe.name }}</a>
+<div class="row row-cols-1 row-cols-md-3 row-cols-lg-4">
+  <div *ngFor="let recipe of recipes" class="col mb-4">
+    <app-recipe-summary class="h-100" [recipe]="recipe"></app-recipe-summary>
+  </div>
 </div>

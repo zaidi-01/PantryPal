@@ -8,7 +8,7 @@ import { ApplicationPaths } from '../app.constants';
   styleUrl: './recipe-list.component.scss',
 })
 export class RecipeListComponent {
-  @Input() public recipeList: Recipe[] = [];
+  @Input() public recipes: Recipe[] = [];
 
   constructor(public appPaths: ApplicationPaths) {}
 }

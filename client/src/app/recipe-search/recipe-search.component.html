@@ -3,7 +3,7 @@
   [class.h-75]="!isLoading && !(recipeList$ | async)"
 >
   <form
-    class="col- col-md-6 m-auto d-flex gap-2"
+    class="col-12 col-md-6 m-auto d-flex gap-2"
     (ngSubmit)="onSearch(inputText)"
   >
     <app-search-bar
@@ -15,26 +15,23 @@
   </form>
 </div>
 
-<div *ngIf="!isLoading && (recipeList$ | async) as recipeList" class="row mb-3">
-  <div class="col-">
-    <h2 *ngIf="recipeList.length === 0 && searchedQuery !== ''">
-      No recipes found for "{{ searchedQuery }}"
-    </h2>
-
-    <h2 *ngIf="recipeList.length === 1">
-      1 recipe found for "{{ searchedQuery }}"
-    </h2>
-
-    <h2 *ngIf="recipeList.length > 1">
-      {{ recipeList.length }} recipes found for "{{ searchedQuery }}"
-    </h2>
-
-    <app-recipe-list [recipeList]="recipeList"> </app-recipe-list>
+<div *ngIf="!isLoading && (recipeList$ | async) as recipeList" class="row flex-grow-1 mb-3">
+  <div
+    *ngIf="!recipeList.length"
+    class="col-12 h-75 d-flex flex-column justify-content-center align-items-center text-muted opacity-75 user-select-none"
+  >
+    <h2>No recipes found</h2>
   </div>
+
+  <app-recipe-list
+    *ngIf="recipeList.length"
+    class="col-12"
+    [recipes]="recipeList"
+  ></app-recipe-list>
 </div>
 
 <div *ngIf="isLoading" class="row flex-grow-1 mb-3">
-  <div class="col- m-auto">
+  <div class="col-12 m-auto">
     <app-spinner></app-spinner>
   </div>
 </div>
