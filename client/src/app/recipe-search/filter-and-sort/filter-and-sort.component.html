@@ -1,0 +1,11 @@
+<mat-select
+  class="form-control rounded-pill"
+  placeholder="Sort By"
+  [(ngModel)]="sortBy"
+  (ngModelChange)="onChangeSortBy()"
+>
+  <mat-option value="undefined">None</mat-option>
+  <mat-option *ngFor="let sortByOption of sortByOptions" [value]="sortByOption">
+    {{ getSortByName(sortByOption) }}
+  </mat-option>
+</mat-select>

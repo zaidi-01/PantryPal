@@ -1,8 +1,18 @@
+import { take } from 'rxjs/operators';
 import { Inject, Injectable } from '@angular/core';
 import { DietaryRestriction, RecipeCategory } from '@enums';
 import { Recipe } from '@interfaces';
 import { Observable, forkJoin, tap } from 'rxjs';
 import { HttpClientService } from './../http-client/http-client.service';
+
+export type SortBy = 'NameAsc' | 'NameDesc' | 'CaloriesAsc' | 'CaloriesDesc';
+
+interface SearchModel {
+  searchQuery: string;
+  skip: number;
+  take: number;
+  sortBy?: SortBy;
+}
 
 /**
  * Represents a new recipe.
@@ -62,10 +72,18 @@ export class RecipeService {
    * @param searchQuery - The search query.
    * @returns An Observable that emits an array of recipes.
    */
-  public searchRecipes(searchQuery: string): Observable<Recipe[]> {
+  public searchRecipes(
+    searchQuery: string,
+    skip: number,
+    take: number,
+    sortBy?: SortBy,
+  ): Observable<Recipe[]> {
     return this.httpClientService
       .post<Recipe[]>('recipe/search', {
         searchQuery: searchQuery,
+        skip: skip,
+        take: take,
+        sortBy: sortBy,
       })
       .pipe(
         tap((recipes) => recipes.forEach((recipe) => this.addImageUrls(recipe)))
