@@ -1,7 +1,7 @@
 import { take } from 'rxjs/operators';
 import { Inject, Injectable } from '@angular/core';
 import { DietaryRestriction, RecipeCategory } from '@enums';
-import { Recipe } from '@interfaces';
+import { Filter, Recipe } from '@interfaces';
 import { Observable, forkJoin, tap } from 'rxjs';
 import { HttpClientService } from './../http-client/http-client.service';
 
@@ -11,6 +11,7 @@ interface SearchModel {
   searchQuery: string;
   skip: number;
   take: number;
+  filters?: Filter<any>[];
   sortBy?: SortBy;
 }
 
@@ -76,6 +77,7 @@ export class RecipeService {
     searchQuery: string,
     skip: number,
     take: number,
+    filters?: Filter<any>[],
     sortBy?: SortBy,
   ): Observable<Recipe[]> {
     return this.httpClientService
@@ -83,6 +85,7 @@ export class RecipeService {
         searchQuery: searchQuery,
         skip: skip,
         take: take,
+        filters: filters,
         sortBy: sortBy,
       })
       .pipe(

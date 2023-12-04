@@ -1,4 +1,5 @@
 import { Component, HostListener } from '@angular/core';
+import { Filter, Recipe } from '@interfaces';
 import { RecipeService, SortBy } from '@services';
 import {
   BehaviorSubject,
@@ -11,7 +12,6 @@ import {
   tap,
 } from 'rxjs';
 import { withLatestFrom } from 'rxjs/operators';
-import { Recipe } from '@interfaces';
 
 const MAX_SEARCH_RESULTS = 20;
 
@@ -32,29 +32,33 @@ export class RecipeSearchComponent {
   private searchQuery$: Subject<string> = new Subject();
   private loadNextPage$: Subject<void> = new Subject();
 
+  private filters$: BehaviorSubject<Filter<any>[]> = new BehaviorSubject(
+    [] as Filter<any>[]
+  );
   private sortBy$: BehaviorSubject<SortBy> = new BehaviorSubject('' as SortBy);
 
   constructor(private recipeService: RecipeService) {
     this.recipeList$ = merge(
       this.searchQuery$.pipe(
-        withLatestFrom(this.sortBy$),
+        withLatestFrom(this.filters$, this.sortBy$),
         tap((_) => (this.isLoading = true)),
-        switchMap(([searchQuery, sortBy]) =>
-          this.recipeService
-            .searchRecipes(searchQuery, 0, MAX_SEARCH_RESULTS, sortBy)
-            .pipe(finalize(() => (this.isLoading = false)))
-        )
+        switchMap(([searchQuery, filters, sortBy]) => {
+          return this.recipeService
+            .searchRecipes(searchQuery, 0, MAX_SEARCH_RESULTS, filters, sortBy)
+            .pipe(finalize(() => (this.isLoading = false)));
+        })
       ),
 
       this.loadNextPage$.pipe(
-        withLatestFrom(this.searchQuery$, this.sortBy$),
+        withLatestFrom(this.searchQuery$, this.filters$, this.sortBy$),
         tap((_) => (this.isLoading = true)),
-        switchMap(([_, searchQuery, sortBy]) =>
+        switchMap(([_, searchQuery, filters, sortBy]) =>
           this.recipeService
             .searchRecipes(
               searchQuery,
               this.currentPage * MAX_SEARCH_RESULTS,
               MAX_SEARCH_RESULTS,
+              filters,
               sortBy
             )
             .pipe(finalize(() => (this.isLoading = false)))
@@ -62,6 +66,10 @@ export class RecipeSearchComponent {
         map((recipeList) => [...this.recipeList, ...recipeList])
       )
     ).pipe(tap((recipeList) => (this.recipeList = recipeList)));
+  }
+
+  onFiltersChange(filters: Filter<any>[]) {
+    this.filters$.next(filters);
   }
 
   onSortByChange(sortBy: SortBy) {

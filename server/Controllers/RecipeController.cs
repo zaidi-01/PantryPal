@@ -13,6 +13,24 @@ namespace server.Controllers
 {
 
   /// <summary>
+  /// A model for filtering recipes.
+  /// </summary>
+  /// <typeparam name="string">The type of the filter key.</typeparam>
+  /// <typeparam name="List<string>">The type of the filter value.</typeparam>
+  public class Filter
+  {
+    /// <summary>
+    /// The filter key.
+    /// </summary>
+    public required string Key { get; set; }
+    /// <summary>
+    /// The filter value.
+    /// </summary>
+    public required List<string> Value { get; set; }
+  }
+
+
+  /// <summary>
   /// A model for searching recipes.
   /// </summary>
   public class SearchModel
@@ -29,6 +47,10 @@ namespace server.Controllers
     /// The number of recipes to take.
     /// </summary>
     public required int Take { get; set; }
+    /// <summary>
+    /// The filters to apply.
+    /// </summary>
+    public List<Filter>? Filters { get; set; }
     /// <summary>
     /// The field to sort by.
     /// </summary>
@@ -138,6 +160,41 @@ namespace server.Controllers
     }
 
     /// <summary>
+    /// Add an Image by recipe ID.
+    /// </summary>
+    /// <param name="id">The ID of the recipe.</param>
+    /// <param name="image">The image to add.</param>
+    /// <returns>The ID of the newly created image.</returns>
+    [HttpPost]
+    [Route("{id:int}/image")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> AddRecipeImage(int id, [FromForm] IFormFile image)
+    {
+      // TODO: Investigate why images are not being saved to the database
+      var recipe = await _context.Recipe.FirstOrDefaultAsync(r => r.Id == id);
+
+      if (recipe == null)
+      {
+        return NotFound();
+      }
+
+      using var memoryStream = new MemoryStream();
+      await image.CopyToAsync(memoryStream);
+
+      if (memoryStream.Length > 1048576)
+      {
+        return BadRequest("Image must be less than 1MB.");
+      }
+
+      var recipeImage = new RecipeImage { ImageData = memoryStream.ToArray() };
+
+      await _context.RecipeImage.AddAsync(recipeImage);
+      await _context.SaveChangesAsync();
+
+      return Ok(recipeImage.Id);
+    }
+
+    /// <summary>
     /// Searches for recipes based on the specified search query.
     /// </summary>
     /// <param name="searchModel">The <see cref="SearchModel"/> instance.</param>
@@ -150,11 +207,40 @@ namespace server.Controllers
       var searchQuery = searchModel.SearchQuery;
       var skip = searchModel.Skip;
       var take = searchModel.Take;
+      var filters = searchModel.Filters;
       var sortBy = searchModel.SortBy;
 
       var recipes = _context.Recipe
         .Where(r => r.Name.ToLower().Contains(searchQuery.ToLower()));
 
+      if (filters != null)
+      {
+        foreach (var filter in filters)
+        {
+          var filterName = filter.Key;
+
+          // TODO: Implement filtering by categories and dietary restrictions
+          // if (filterName == "Categories")
+          // {
+          //   List<RecipeCategory> filterValues = filter.Value.ConvertAll(f => (RecipeCategory)Enum.Parse(typeof(RecipeCategory), f.ToString()));
+          //   recipes = recipes.Where(r => r.Categories.Any(c => filterValues.Contains(c)));
+          // }
+          // else if (filterName == "DietaryRestrictions")
+          // {
+          //   List<DietaryRestriction> filterValues = filter.Value.ConvertAll(f => (DietaryRestriction)Enum.Parse(typeof(DietaryRestriction), f.ToString()));
+          //   recipes = recipes.Where(r => filterValues.All(f => r.DietaryRestrictions.Contains(f)));
+          // }
+
+          if (filterName == "Ingredients")
+          {
+            // Select recipes that have all the Ingredients in the filter value
+            foreach (var filterValue in filter.Value)
+            {
+              recipes = recipes.Where(r => r.Ingredients.ToLower().Contains(filterValue.ToLower()));
+            }
+          }
+        }
+      }
 
       if (sortBy != null)
       {
