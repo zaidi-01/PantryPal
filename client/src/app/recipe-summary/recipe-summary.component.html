@@ -1,0 +1,49 @@
+<div
+  class="card h-100 overflow-hidden"
+  role="button"
+  [routerLink]="['/', appPaths.recipe, recipe.id]"
+>
+  <div class="row g-0 flex-grow-1">
+    <div class="recipe-img col-4 col-md-12 d-flex">
+      <div
+        class="w-100 h-100 d-flex align-items-center justify-content-center overflow-hidden bg-light"
+      >
+        <img
+          *ngIf="recipe.imageUrls.length"
+          [src]="recipe.imageUrls[0]"
+          alt="Recipe Image"
+        />
+        <div *ngIf="!recipe.imageUrls.length" class="text-center text-muted">
+          <mat-icon class="icon-xl">restaurant</mat-icon>
+        </div>
+      </div>
+    </div>
+    <div class="col-8 col-md-12">
+      <div class="card-body h-100 d-flex flex-column">
+        <h5 class="card-title text-truncate" [matTooltip]="recipe.name">
+          {{ recipe.name }}
+        </h5>
+        <p class="card-text">
+          {{ recipe.description }}
+        </p>
+        <div class="card-text d-flex flex-wrap gap-2 mt-auto">
+          <app-recipe-attribute
+            *ngIf="recipe.totalTime"
+            icon="timer"
+            text="{{ recipe.totalTime }}"
+          ></app-recipe-attribute>
+          <app-recipe-attribute
+            *ngIf="recipe.calories"
+            icon="local_fire_department"
+            text="{{ recipe.calories }}"
+          ></app-recipe-attribute>
+          <app-recipe-attribute
+            *ngIf="recipe.servings"
+            icon="people"
+            text="{{ recipe.servings }}"
+          ></app-recipe-attribute>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+@import "utilities";
+
+:host {
+  display: block;
+}
+
+.form-control:focus-within {
+  background: $input-focus-bg;
+  border-color: $input-focus-border-color;
+  color: $input-focus-color;
+  box-shadow: $input-focus-box-shadow;
+}
+
+input:focus {
+  outline: none;
+}

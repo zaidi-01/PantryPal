@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { ROUTES, RouterModule, Routes } from '@angular/router';
 import { AdminModule } from 'src/admin/admin.module';
@@ -22,6 +23,7 @@ import { HomeComponent } from './home/home.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
 import { RecipeSearchComponent } from './recipe-search/recipe-search.component';
+import { RecipeSummaryComponent } from './recipe-summary/recipe-summary.component';
 import { RecipeComponent } from './recipe/recipe.component';
 
 const buildRoutes = (appPaths: ApplicationPaths): Routes => [
@@ -56,6 +58,7 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
     DialogComponent,
     HomeComponent, //TODO: remove in the future if not needed
     IngredientComponent,
+    RecipeSummaryComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -64,6 +67,7 @@ const buildRoutes = (appPaths: ApplicationPaths): Routes => [
     CommonModule,
     MatButtonModule,
     MatIconModule,
+    MatTooltipModule,
     AdminModule,
     SharedModule,
     ScrollingModule,

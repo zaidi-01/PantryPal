@@ -1,36 +1,37 @@
-<h1>PantryPal</h1>
-<p>Use the search bar below to search for any recipe</p>
+<div
+  class="row d-flex mb-3"
+  [class.h-75]="!isLoading && !(recipeList$ | async)"
+>
+  <form
+    class="col-12 col-md-6 m-auto d-flex gap-2"
+    (ngSubmit)="onSearch(inputText)"
+  >
+    <app-search-bar
+      class="flex-grow-1"
+      placeholder="Search recipes"
+      [(search)]="inputText"
+    ></app-search-bar>
+    <button type="submit" class="btn btn-primary rounded-pill">Search</button>
+  </form>
+</div>
 
-<form (ngSubmit)="onSearch(inputText)">
-  <div class="form-outline">
-    <i class="fas fa-search"></i>
-    <input
-      type="text"
-      class="form-control"
-      name="inputText"
-      [(ngModel)]="inputText"
-      placeholder="Search Recipe.."
-    />
+<div *ngIf="!isLoading && (recipeList$ | async) as recipeList" class="row flex-grow-1 mb-3">
+  <div
+    *ngIf="!recipeList.length"
+    class="col-12 h-75 d-flex flex-column justify-content-center align-items-center text-muted opacity-75 user-select-none"
+  >
+    <h2>No recipes found</h2>
   </div>
-  <button type="submit">Search</button>
-</form>
 
-<ng-container *ngIf="isLoading">
-  <h2>Loading...</h2>
-</ng-container>
+  <app-recipe-list
+    *ngIf="recipeList.length"
+    class="col-12"
+    [recipes]="recipeList"
+  ></app-recipe-list>
+</div>
 
-<ng-container *ngIf="!isLoading && (recipeList$ | async) as recipeList">
-  <ng-container *ngIf="recipeList.length === 0 && searchedQuery !== ''">
-    <h2>No recipes found for "{{ searchedQuery }}"</h2>
-  </ng-container>
-
-  <ng-container *ngIf="recipeList.length === 1">
-    <h2>1 recipe found for "{{ searchedQuery }}"</h2>
-  </ng-container>
-
-  <ng-container *ngIf="recipeList.length > 1">
-    <h2>{{ recipeList.length }} recipes found for "{{ searchedQuery }}"</h2>
-  </ng-container>
-
-  <app-recipe-list [recipeList]="recipeList"> </app-recipe-list>
-</ng-container>
+<div *ngIf="isLoading" class="row flex-grow-1 mb-3">
+  <div class="col-12 m-auto">
+    <app-spinner></app-spinner>
+  </div>
+</div>

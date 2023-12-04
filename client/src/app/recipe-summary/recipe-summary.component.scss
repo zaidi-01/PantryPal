@@ -1,0 +1,30 @@
+@import "utilities";
+
+:host {
+  display: block;
+}
+
+.recipe-img {
+  aspect-ratio: 1;
+}
+
+.recipe-img img {
+  min-width: 100%;
+  min-height: 100%;
+
+  object-fit: cover;
+}
+
+p {
+  display: -webkit-box;
+  overflow: hidden;
+
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+@include media-breakpoint-up(md) {
+  .recipe-img {
+    aspect-ratio: 2;
+  }
+}
