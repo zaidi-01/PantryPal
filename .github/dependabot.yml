@@ -7,11 +7,6 @@ updates:
     labels:
       - "angular"
       - "dependencies"
-    reviewers:
-      - "zaidi-01"
-      - "StevieShibly8"
-      - "NilinReza"
-      - "JJTomines"
     commit-message:
       prefix: "chore"
       include: "scope"
@@ -33,11 +28,6 @@ updates:
     labels:
       - ".net"
       - "dependencies"
-    reviewers:
-      - "zaidi-01"
-      - "StevieShibly8"
-      - "NilinReza"
-      - "JJTomines"
     commit-message:
       prefix: "chore"
       include: "scope"
